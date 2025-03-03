@@ -1,0 +1,208 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: monospace;
+    box-sizing: border-box;
+}
+
+body {
+    background: #080808;
+    color: #fff;
+}
+
+.container {
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    z-index: 1000;
+
+}
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-image: url('../images/ahmed-ErIF4PnLuss-unsplash.jpg');
+
+);
+
+}
+
+nav ul li {
+    display: inline-block;
+    list-style: none;
+    margin: 10px 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    position: relative;
+}
+
+nav ul li a::after {
+    content: '';
+    width: 0%;
+    height: 3px;
+    background: #ff004f;
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    transition: 0.5s;
+}
+
+nav ul li a:hover::after {
+    width: 100%;
+}
+
+.headtext{
+
+    font-size: 30px;
+    padding: 10px;
+    text-align: center;
+
+
+}
+.headtext h1{
+    font-size: 60px;
+    margin-top: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.Photo{
+    max-width: 500px;
+    width: 550px;
+    height: 550px;
+    border-radius: 10px;
+    text-align: right;
+}
+
+/*-------------about------------------*/
+
+#about {
+    padding: 50px;
+    color: #fff;
+}
+
+.row {
+    display: flex;   /* Enables horizontal layout */
+    align-items: flex-start; /* Aligns items vertically */
+    gap: 20px; /* Adds space between columns */
+    width: 100%;
+}
+
+.about-col-1 {
+    flex-basis: 35%;
+}
+.about-col-2 h1{
+    margin-bottom: 50px;
+    color: #ff004f;
+}
+.about-col-2 {
+    flex-basis: 60%;
+    text-align: left;
+    font-size: 20px;
+}
+
+.Photo2 {
+    width: 100%;
+    max-width: 800px;
+    border-radius: 10px;
+}
+.tabs{
+    display: flex;
+    margin: 20px 0 40px;
+}
+.tab-links{
+    margin-right: 50px;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    position: relative;
+}
+.tab-links::after{
+    content: '';
+    width: 0;
+    height: 3px;
+    background: #ff004f;
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    transition: 0.5s;
+}
+.tab-links.active-link::after{
+    width: 50%;
+}
+
+.tab-contents ul li{
+    list-style: none;
+    margin: 10px 0;;
+}
+.tab-contents ul li span{
+    color: #ff004f;
+    font-size: 15px;
+}
+.tab-contents{
+    display: none;
+}
+.tab-contents.active-tab{
+    display: block;
+}
+/* Personal project section */
+
+#products-sale {
+    background-image: url('../images/sam-dan-truong-ju2NgSoR6pA-unsplash.jpg');
+    background-position: bottom;
+    padding: 20px;
+}
+
+.personal-projects-col1 {
+    display: flex;  /* Flexbox to align children horizontally */
+    flex-wrap: wrap;  /* Allow wrapping if needed */
+    gap: 20px;  /* Space between the items */
+    justify-content: flex-start;  /* Align to the left */
+    width: 100%;
+    margin-top: 20px; /* To ensure there’s some space between the header and the divs */
+}
+
+.Product {
+    flex-basis: calc(25% - 20px);  /* Each div takes up 25% of the container width, minus the gap */
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.Product h2 {
+    margin-bottom: 10px;
+    font-size: 30px;
+}
+
+.Product p {
+    color: #ff004f;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.personal-projects-col1 h1 {
+    font-size: 40px;
+    margin-bottom: 20px; /* Adds space between header and projects list */
+    text-align: center;
+    width: 100%;
+}
+.Product div{
+    background:#080808;
+    padding: 40px;
+    font-weight: 200;
+    border-right: 10px;
+    border-radius: 10px;
+}
+a{
+    font-size: 20px;
+}
+
+
+
+
