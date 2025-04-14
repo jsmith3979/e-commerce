@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+<div class="header">
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="#">Accessibility</a></li>
+                <li><a href="/login">Login</a></li>
+                <li><a href="/register">Register</a></li>
+            </ul>
+        </nav>
+        <div class="search-bar">
+            <form action="{{ url_for('search') }}" method="GET">
+                <input type="text" name="query" placeholder="Search for items..." value="{{ query if query else '' }}" required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <div class="logo"><h2>E</h2><h1>BUY</h1></div>
+    </div>
+<!--    <div class="Item_column">-->
+<!--        {% for item in items %}-->
+<!--        <div class="Product">-->
+<!--            <div>-->
+<!--                <h2>{{ item.name }}</h2>-->
+<!--                <p>Seller: {{ item.username }}</p>-->
+<!--                <p>Price: ${{ item.price }}</p>-->
+<!--                <p>Category: {{ item.category }}</p>-->
+
+<!--                <img src="{{ url_for('item_image', item_id=item.item_id) }}" alt="{{ item.name }} Image" width="200" height="200">-->
+<!--                <p>{{ item.description }}</p>-->
+<!--            </div>-->
+<!--            <div><a href="/item/{{ item.item_id }}">View Item</a></div>-->
+<!--        </div>-->
+<!--        {% endfor %}-->
+<!--    </div>-->
+<!--</div>-->
+
+
+<div class="panel-grid">
+  <a href="{{ url_for('search', category='Home') }}" class="panel">
+    <img src="{{ url_for('static', filename='images/DesktopHeader-P386_NWT008_NWT005_NWT009_B.jpg.jpeg') }}" alt="Deals" />
+    <div class="panel-content">
+      <h3>House & Home</h3>
+      <p>Where Comfort Meets Style — Furniture That Feels Like Home.</p>
+    </div>
+  </a>
+
+  <a href="{{ url_for('search', category='Electronics') }}" class="panel">
+    <img src="{{ url_for('static', filename='images/67c055e09f7d7d001d9227bf.jpg') }}" alt="Electronics" />
+    <div class="panel-content">
+      <h3>Electronics</h3>
+      <p>Explore the latest in tech and gadgets.</p>
+    </div>
+  </a>
+
+  <a href="{{ url_for('search', category='Fashion') }}" class="panel">
+    <img src="{{ url_for('static', filename='images/Rental-Fashion-Causes-More-Emissions-Than-Throwing-Clothes-Away.jpg') }}" alt="Fashion" />
+    <div class="panel-content">
+      <h3>Fashion Finds</h3>
+      <p>Stay in style with our curated clothing picks.</p>
+    </div>
+  </a>
+
+    <a href="{{ url_for('search', category='Books') }}" class="panel">
+    <img src="{{ url_for('static', filename='images/Books_1920_X_1080_copy.jpg') }}" alt="Books" />
+    <div class="panel-content">
+      <h3>Books</h3>
+      <p>Stories and knowledge for every reader.</p>
+    </div>
+  </a>
+
+</div>
+<div class="panel-grid2">
+  <a href="{{ url_for('search', category='Toys') }}" class="panel">
+    <div class="panel-content">
+      <h3>Toys & Games</h3>
+    </div>
+  </a>
+
+
+  <a href="{{ url_for('search', category='Sports') }}" class="panel">
+    <div class="panel-content">
+      <h3>Sports & Outdoors</h3>
+    </div>
+  </a>
+
+
+  <a href="{{ url_for('search', category='Beauty') }}" class="panel">
+    <div class="panel-content">
+      <h3>Beauty & Care</h3>
+    </div>
+  </a>
+
+
+  <a href="{{ url_for('search', category='Automotive') }}" class="panel">
+    <div class="panel-content">
+      <h3>Automotive</h3>
+    </div>
+  </a>
+
+
+  <a href="{{ url_for('search', category='Groceries') }}" class="panel">
+    <div class="panel-content">
+      <h3>Groceries</h3>
+    </div>
+  </a>
+</div>
+
+<div class="panel-grid">
+    <a href="{{ url_for('search', category='Books') }}" class="panel">
+        <img src="{{ url_for('static', filename='images/istockphoto-1257170567-640x640.jpg') }}" alt="Books" />
+        <div class="panel-content">
+            <h3>New Deals</h3>
+        </div>
+    </a>
+
+        <a href="{{ url_for('search', category='Books') }}" class="panel">
+    <img src="{{ url_for('static', filename='images/istockphoto-1135222849-612x612.jpg') }}" alt="Books" />
+    <div class="panel-content">
+      <h3>Best sellers</h3>
+    </div>
+  </a>
+
+        <a href="{{ url_for('search', category='Books') }}" class="panel">
+    <img src="{{ url_for('static', filename='images/Capture.JPG') }}" alt="Books" />
+    <div class="panel-content">
+      <h3>E-Buy Recommends</h3>
+    </div>
+  </a>
+</div>
+
+
+<script>
+    var tablinks = document.getElementsByClassName("tab-links");
+    var tabcontents = document.getElementsByClassName("tab-contents");
+
+    function opentab(tabname){
+        for(tablink of tablinks){
+            tablink.classList.remove("active-link")
+        }
+        for(tabcontent of tabcontents){
+            tabcontent.classList.remove("active-tab")
+        }
+        event.currentTarget.classList.add("active-link");
+        document.getElementById(tabname).classList.add("active-tab");
+    }
+</script>
+
+</body>
+</html>

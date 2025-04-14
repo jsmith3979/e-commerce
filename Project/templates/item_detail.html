@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ item.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+<div class="header">
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="#">Accessibility</a></li>
+                <li><a href="/logout">Logout</a></li>
+                <li><a href="#">Reviews</a></li>
+                <li><a href="/Create_listing">Create listing</a></li>
+                <li><a href="javascript:window.history.back()">Go Back</a></li>
+            </ul>
+        </nav>
+        <div class="logo"><h2>E</h2><h1>BUY</h1></div>
+    </div>
+</div>
+
+<div class="inspect_item_column">
+    <div class="inspect_Product">
+        <div>
+            <h1>{{ item.name }}</h1>
+            <img src="{{ url_for('item_image', item_id=item.item_id) }}" alt="{{ item.name }} Image" width="300" height="300">
+            <p><strong>Description:</strong> {{ item.description }}</p>
+            <p><strong>Price:</strong> ${{ item.price }}</p>
+            <p><strong>Category:</strong> {{ item.category }}</p>
+            <p><strong>Stock:</strong> {{ item.stock_quantity }}</p>
+
+            {% if session['user_id'] != item.user_id %}
+                <div class="inspect-actions">
+                    <a href="{{ url_for('chat', user_id=item.user_id, item_id=item.item_id) }}" class="message-button">💬 Message Seller</a>
+
+                    <!-- Add to Basket Form -->
+            <form action="{{ url_for('item_detail', item_id=item.item_id) }}" method="POST">
+                <div class="quantity-wrapper">
+                    <label for="quantity"><strong>Quantity:</strong></label>
+                    <input type="number" id="quantity" name="quantity" value="1" min="1" required>
+                </div>
+                <button type="submit" class="btn btn-success">Add to Basket</button>
+            </form>
+
+            {% if session.get('is_admin') == 1 %}
+                {% if is_favorited %}
+                    <!-- If the item is favorited, show "Unfavorite" button -->
+                    <form action="{{ url_for('item_detail', item_id=item.item_id) }}" method="POST">
+                        <button type="submit" name="favorite" value="unfavorite" class="btn btn-danger">💔 Unfavorite Item</button>
+                    </form>
+                {% else %}
+                    <!-- If the item is not favorited, show "Favorite" button -->
+                    <form action="{{ url_for('item_detail', item_id=item.item_id) }}" method="POST">
+                        <button type="submit" name="favorite" value="favorite" class="btn btn-warning">⭐ Favorite Item</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+
+                </div>
+            {% else %}
+                <p><em>You cannot add your own item to the basket.</em></p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+
+
+
+

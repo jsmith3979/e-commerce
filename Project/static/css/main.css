@@ -5,36 +5,43 @@
     box-sizing: border-box;
 }
 
+
 body {
-    background: #080808;
-    color: #fff;
+  background: linear-gradient(200deg, #000000, #0a0f2c);
+  color: #ffffff; /* Optional: makes text easier to read */
+  min-height: 100vh;
+  margin: 0;
+  font-family: monospace;
 }
 
-.container {
 
-    position: fixed;
+.container {
     top: 0;
     left: 0;
     width: 100%;
     padding: 20px;
     z-index: 1000;
 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 .header {
-    display: flex;
-    justify-content: center;
+    width: 100%;
     align-items: center;
-    padding: 20px;
-    background-image: url('../images/ahmed-ErIF4PnLuss-unsplash.jpg');
 
-);
+}
 
+nav ul {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 nav ul li {
     display: inline-block;
-    list-style: none;
-    margin: 10px 20px;
 }
 
 nav ul li a {
@@ -48,7 +55,7 @@ nav ul li a::after {
     content: '';
     width: 0%;
     height: 3px;
-    background: #ff004f;
+    background: linear-gradient(200deg, #D90368, #DF2935);
     position: absolute;
     left: 0;
     bottom: -6px;
@@ -100,7 +107,7 @@ nav ul li a:hover::after {
 }
 .about-col-2 h1{
     margin-bottom: 50px;
-    color: #ff004f;
+    color: #3A6EA5;
 }
 .about-col-2 {
     flex-basis: 60%;
@@ -128,7 +135,7 @@ nav ul li a:hover::after {
     content: '';
     width: 0;
     height: 3px;
-    background: #ff004f;
+    background: #3A6EA5;
     position: absolute;
     left: 0;
     bottom: -8px;
@@ -143,7 +150,7 @@ nav ul li a:hover::after {
     margin: 10px 0;;
 }
 .tab-contents ul li span{
-    color: #ff004f;
+    color: #3A6EA5;
     font-size: 15px;
 }
 .tab-contents{
@@ -159,8 +166,21 @@ nav ul li a:hover::after {
     background-position: bottom;
     padding: 20px;
 }
+.Product p {
+    color: #3A6EA5;
+    font-size: 16px;
+    margin-bottom: 10px;
+    word-wrap: break-word; /* Break long words to fit */
+    text-align: center; /* Centers text */
+    line-height: 1.6; /* Increased line spacing */
+    overflow-wrap: break-word; /* Ensures long words break properly */
+    white-space: normal; /* Ensures the text will wrap */
+    word-break: break-word; /* Breaks long words */
+}
 
-.personal-projects-col1 {
+
+
+.Item_column {
     display: flex;  /* Flexbox to align children horizontally */
     flex-wrap: wrap;  /* Allow wrapping if needed */
     gap: 20px;  /* Space between the items */
@@ -170,30 +190,55 @@ nav ul li a:hover::after {
 }
 
 .Product {
-    flex-basis: calc(25% - 20px);  /* Each div takes up 25% of the container width, minus the gap */
-    padding: 10px;
+    display: flex;
+    flex-direction: column;  /* Stack content inside */
+    justify-content: center; /* Center vertically */
+    text-align: center;      /* Centers text inside */
+    padding: 3px;
+    max-width: 400px;
     box-sizing: border-box;
+    width: 300px; /* Set a fixed width for the product box */
+    height: auto; /* Adjust the height based on content */
+    overflow: hidden; /* Prevent content overflow */
+    background: white; /* Optional: background color for visibility */
+    border-radius: 10px;
+    margin: 10px; /* Optional: margin between items */
+}
+
+.Product p {
+    color: white;
+    font-size: 16px;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+    text-align: center;
+    line-height: 1.6;
+    white-space: nowrap; /* Ensures text does not wrap to a new line */
+    overflow: hidden; /* Hides anything that overflows */
+    text-overflow: ellipsis; /* Adds '...' at the end when truncated */
+    max-width: 280px; /* Adjust based on your box size */
+}
+
+.Product img {
+    display: block;
+    margin: 0 auto; /* Ensures image is centered */
+
 }
 
 .Product h2 {
     margin-bottom: 10px;
     font-size: 30px;
+    color: white;
 }
 
-.Product p {
-    color: #ff004f;
-    font-size: 20px;
-    margin-bottom: 10px;
-}
 
-.personal-projects-col1 h1 {
+.Item_column h1 {
     font-size: 40px;
-    margin-bottom: 20px; /* Adds space between header and projects list */
+    margin-bottom: 20px;
     text-align: center;
     width: 100%;
 }
 .Product div{
-    background:#080808;
+    background: linear-gradient(200deg, #D90368, #DF2935);
     padding: 40px;
     font-weight: 200;
     border-right: 10px;
@@ -203,6 +248,849 @@ a{
     font-size: 20px;
 }
 
+#form {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 30px;
+    background: linear-gradient(200deg, #D90368, #DF2935);
+    border-radius: 8px;
+    font-family: monospace;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+#form h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 26px;
+    color: #333;
+}
+
+
+#form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: white;
+    font-size: 16px;
+}
+
+
+#form input[type="text"],
+#form input[type="email"],
+#form input[type="password"],
+#form input[type="number"],
+#form select,
+#form textarea {
+    width: 100%;
+    max-width: 100%;
+    padding: 12px;
+    border: 1px solid #3A6EA5;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+
+#form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+
+#form button {
+    width: 100%;
+    padding: 14px;
+    background-color: #3A6EA5;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#form button:hover {
+    background-color: #5E96D1;
+}
+
+
+#form p {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+#form p a {
+    color: #3A6EA5;
+    text-decoration: none;
+}
+
+#form p a:hover {
+    text-decoration: underline;
+}
+
+
+.headtext{
+    padding: 50px;
+
+
+}
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.logo h1{
+    font-size: 50px;
+}
+.logo h2{
+    font-size: 50px;
+    color: #DF2935;
+}
+
+.inspect_item_column {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+    text-align: center;
+}
+
+
+.inspect_Product {
+    max-width: 600px;
+    padding: 3px;
+    box-sizing: border-box;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.inspect_Product h2 {
+    margin-bottom: 10px;
+    font-size: 30px;
+}
+
+.inspect_Product p {
+    word-wrap: break-word;
+    white-space: normal;
+    line-height: 1.6;
+    color: white;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.inspect_item_column h1 {
+    font-size: 40px;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%;
+}
+.inspect_Product div{
+    background: linear-gradient(200deg, #D90368, #DF2935);
+    padding: 40px;
+    font-weight: 200;
+    border-right: 10px;
+    border-radius: 10px;
+}
+
+
+.search-bar {
+    margin: 20px 0;
+    text-align: center;
+
+}
+
+.search-bar input {
+    padding: 10px;
+    width: 700px;
+    font-size: 16px;
+    border-radius: 5px;
+    font-family: monospace;
+}
+
+.search-bar button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: monospace;
+    border-radius: 5px;
+}
+.filter-section {
+    margin: 20px 0;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-section label {
+    font-weight: bold;
+}
+
+.filter-section input, .filter-section select, .filter-section button {
+    padding: 5px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+}
+.panel-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin: 20px;
+
+    }
+
+    .panel {
+      background: linear-gradient(200deg, #D90368, #DF2935);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      text-decoration: none;
+      color: white;
+    }
+
+    .panel:hover {
+      transform: scale(1.03);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .panel img {
+      width: 100%;
+      height: 200px;
+      display: block;
+    }
+
+    .panel-content {
+      padding: 15px;
+    }
+
+    .panel-content h3 {
+      margin: 0 0 10px;
+      font-size: 1.2em;
+    }
+
+    .panel-content p {
+      font-size: 0.95em;
+      color: white;
+    }
+.panel-grid2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin: 20px;
+
+    }
+
+/*#chatbox {*/
+/*    width: 100%;*/
+/*    max-width: 500px;*/
+/*    margin: 0 auto;*/
+/*    padding: 30px;*/
+/*    background-color: #f4f4f4;*/
+/*    border-radius: 8px;*/
+/*    font-family: monospace;*/
+/*    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);*/
+/*    color: #3A6EA5;*/
+/*    font-size: 20px;*/
+/*}*/
+
+
+#chatbox h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 26px;
+    color: #333;
+}
+
+
+/*#chatbox label {*/
+/*    display: block;*/
+/*    margin-bottom: 8px;*/
+/*    font-weight: bold;*/
+/*    color: #555;*/
+/*    font-size: 16px;*/
+/*}*/
+
+
+
+#chatbox textarea {
+    width: 100%;
+    max-width: 100%;
+    padding: 12px;
+    margin: 12px 0 20px 0;
+    border: 1px solid #3A6EA5;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+
+/*#chatbox textarea {*/
+/*    resize: vertical;*/
+/*    min-height: 100px;*/
+/*}*/
+
+
+#chatbox button {
+    width: 100%;
+    padding: 14px;
+    background-color: #3A6EA5;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#chatbox button:hover {
+    background-color: #5E96D1;
+}
+
+
+#chatbox p {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+#chatbox p a {
+    color: #3A6EA5;
+    text-decoration: none;
+}
+
+#chatbox p a:hover {
+    text-decoration: underline;
+}
+#chatbox {
+    max-width: 600px;
+    margin: 40px auto;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background-color: #f5f5f5;
+    padding: 20px;
+    font-family: monospace;
+}
+
+#chat-box {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+}
+.message {
+    background-color: white;
+    border-radius: 8px;
+    padding: 10px 15px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    max-width: 80%;
+}
+.message strong {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.message p {
+    margin: 0;
+    color: #444;
+}
+
+.message small {
+    display: block;
+    text-align: right;
+    font-size: 0.75em;
+    color: #888;
+    margin-top: 5px;
+}
+
+
+.message.you {
+    align-self: flex-end;
+    background-color: black;
+}
+
+.message.other {
+    align-self: flex-start;
+    background-color: #ffffff;
+}
+
+.chat-inbox {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #f9f9fb;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.chat-inbox h3 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #333;
+    text-align: center;
+}
+
+.chat-inbox ul {
+    list-style: none;
+    padding: 0;
+}
+
+.chat-inbox li {
+    margin-bottom: 12px;
+}
+
+.chat-inbox a {
+    text-decoration: none;
+    color: black;
+    padding: 10px 15px;
+    display: block;
+    background-color: #e7f1ff;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.chat-inbox a:hover {
+    background-color: white;
+    color: #888;
+}
+
+.chat-inbox p {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+}
+
+.notification-container {
+  position: relative; /* For positioning the badge relative to the icon */
+  display: inline-block;
+}
+
+.notification-icon {
+  width: 34px;
+  height: 34px;
+  fill: #555; /* Change color as needed */
+}
+.notification-icon:hover {
+    transform: scale(1.1);
+}
+
+.notification-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: red;     /* Badge background */
+  color: white;        /* Badge text color */
+  border-radius: 50%;  /* Make it circular */
+  padding: 2px 6px;    /* Adjust size as needed */
+  font-size: 12px;     /* Adjust font size */
+  font-weight: bold;
+}
+.notifications-list {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Individual notification styling */
+.notification {
+  background: #fff;
+  border-left: 15px solid #4CAF50;
+  padding: 15px 20px;
+  margin-bottom: 15px;
+  border-radius: 3px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+  color: black;
+}
+
+/* Styling for read notifications */
+.notification.read {
+  background: #e9e9e9;
+  border-left-color: #aaa;
+  color: #777;
+}
+
+/* Timestamp styling */
+.notification .timestamp {
+  font-size: 0.8em;
+  color: #999;
+  margin-top: 5px;
+}
+
+/* Hover effects */
+
+
+.notifications-list h2 {
+    text-align: center;
+}
+.notifications-list p {
+    text-align: center;
+}
+.basket-container {
+    position: relative;
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.basket-icon {
+    width: 34px;
+    height: 34px;
+    fill: #555;
+    cursor: pointer;
+}
+
+.basket-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: red;
+    color: white;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 50%;
+    display: none; /* Or show conditionally with JS */
+}
+.basket-icon:hover {
+    transform: scale(1.1);
+}
+.basket-div {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    font-family: monospace;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.basket-div h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+    color: #3A6EA5;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+table th, table td {
+    padding: 15px;
+    text-align: left;
+    font-size: 16px;
+    color: #333;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #3A6EA5;
+    color: white;
+}
+
+table tr:hover {
+    background-color: #f0f0f0;
+}
+
+table img {
+    vertical-align: middle;
+    margin-right: 10px;
+    border-radius: 4px;
+}
+
+.btn-success {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 15px;
+    background-color: #3A6EA5;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-success:hover {
+    background-color: #5E96D1;
+}
+.inspect-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+
+}
+
+.quantity-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+input[type="number"] {
+  width: 60px;
+  padding: 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.message-button {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #3A6EA5;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  width: fit-content;
+}
+
+.message-button:hover {
+  background-color: #5E96D1;
+}
+/* Container for all product cards */
+.product-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 30px;
+}
+
+/* Each product card */
+.product-card {
+    background: linear-gradient(200deg, #D90368, #DF2935);
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 250px;
+    text-align: center;
+    transition: transform 0.2s ease-in-out;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Product image */
+.product-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Title */
+.product-card h3 {
+    font-size: 1.3em;
+    margin: 10px 0;
+    color: white;
+}
+
+/* Text details */
+.product-card p {
+    margin: 5px 0;
+    color: white;
+}
+
+/* View button */
+.product-card .btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: #3A6EA5;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.product-card .btn:hover {
+    background-color: #5E96D1;
+}
+
+h1{
+    text-align: center;
+}
+.recommendations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.item-card {
+    background: linear-gradient(200deg, #D90368, #DF2935);
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    text-align: center;
+}
+/* Target the whole recommendations section */
+
+
+/* Optional: style the heading */
+.admin-favorites .highlight-heading {
+    font-size: 2rem;
+    color: #d2691e;
+    text-align: center;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+.stock-form {
+    margin-top: 10px;
+}
+
+.stock-form input {
+    width: 60px;
+    padding: 4px;
+    margin-right: 6px;
+}
+
+.stock-form button {
+    padding: 4px 10px;
+    background-color: #3A6EA5;
+    border: none;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.stock-form button:hover {
+    background-color: #5E96D1;
+}
+
+.edit-item-form {
+    background: linear-gradient(200deg, #D90368, #DF2935);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Image styling */
+.image-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.item-image {
+    width: 200px;
+    height: auto;
+    border-radius: 8px;
+    padding: 5px;
+
+}
+
+/* Form elements */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+#price {
+    width: 300px;     /* makes it wider */
+    height: 45px;     /* makes it taller */
+    font-size: 1.1rem; /* increases text size */
+    padding: 0.5rem;  /* spacing inside */
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+#stock_quantity {
+    width: 300px;     /* makes it wider */
+    height: 45px;     /* makes it taller */
+    font-size: 1.1rem; /* increases text size */
+    padding: 0.5rem;  /* spacing inside */
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    border-color: #3A6EA5;
+    outline: none;
+}
+
+/* Submit button */
+.btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #3A6EA5;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.btn:hover {
+    background-color: #5E96D1;
+}
+
+.btn:focus {
+    outline: none;
+}
+.flashes {
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+}
+.flash {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+.flash.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+.flash.warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+.flash.danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
 
 
 
