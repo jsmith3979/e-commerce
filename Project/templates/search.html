@@ -10,27 +10,34 @@
 <body>
 <div class="header">
     <div class="container">
-        <nav>
-            <ul>
-                <li><a href="/dashboard">Home</a></li>
-                <li><a href="#">Reviews</a></li>
-                <li><a href="/Create_listing">Create listing</a></li>
-                <li><a href="/chat_inbox">Messages</a></li>
-                <li><a href="/my_listings">My listings</a></li>
-
-            </ul>
-        </nav>
+        <div class="navbar">
+                <div class="burger" id="burger">
+                    ☰
+                </div>
+                    <nav>
+                        <ul class="nav-links" id="navLinks">
+                            {% if 'user_id' in session %}
+                            <li><a class="nav-button" href="/dashboard">Home</a></li>
+                            <li><a class="nav-button" href="/purchased_items">My Purchases</a></li>
+                            <li><a class="nav-button" href="/reviews">My reviews</a></li>
+                            <li><a class="nav-button" href="/Create_listing">Create listing</a></li>
+                            <li><a class="nav-button" href="/chat_inbox">Messages</a></li>
+                            <li><a class="nav-button" href="/my_listings">My listings</a></li>
+                            <li><a class="nav-button" href="/logout">Logout</a></li>
+                            {% else %}
+                            <li><a class="nav-button" href="/">Home</a></li>
+                            <li><a class="nav-button" href="/login">Login</a></li>
+                            <li><a class="nav-button" href="/register">Register</a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+        </div>
         <div class="search-bar">
             <form action="{{ url_for('search') }}" method="GET">
                 <input type="text" name="query" placeholder="Search for items..." value="{{ query if query else '' }}" required>
                 <button type="submit">Search</button>
             </form>
         </div>
-        <nav>
-            <ul>
-                <li><a href="/logout">Logout</a></li>
-            </ul>
-        </nav>
         <div class="notification-container">
             <a href="{{ url_for('notifications_page') }}">
                 <svg class="notification-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -52,10 +59,11 @@
                 </svg>
             </a>
         </div>
-
         <div class="logo"><h2>E</h2><h1>BUY</h1></div>
     </div>
-    <div class="filter-section">
+</div>
+
+<div class="filter-section">
     <form method="GET" action="{{ url_for('search') }}">
         <label for="category">Category:</label>
         <select name="category" id="category">
@@ -71,10 +79,16 @@
         <label for="price_max">Max Price:</label>
         <input type="number" name="price_max" id="price_max" placeholder="0" min="0" max="100000" value="{{ request.args.get('price_max', '') }}">
 
+        <label for="most_sold">
+            <input type="checkbox" name="most_sold" id="most_sold" {% if most_sold %} checked {% endif %}>
+            Most Sold
+        </label>
+
         <button type="submit">Filter</button>
-        <a href="{{ url_for('Unlogged_home') }}"><button type="button">Reset</button></a>
+        <button type="button" onclick="resetForm()">Reset</button>
     </form>
 </div>
+
 <div class="Item_column {% if show_admin_favorites %}admin-favorites{% endif %}">
     {% for item in items %}
     <div class="Product">
@@ -88,44 +102,158 @@
             <img src="{{ url_for('item_image', item_id=item.item_id) }}" alt="{{ item.name }} Image" width="200" height="200">
 
             <p class="description">Description: {{ item.description }}</p>
-            <a href="/item/{{ item.item_id }}" class="view-item-link">View Item</a>
+            <p class="sold-count">Sold: {{ item.total_sold }} times</p>
+
+            <a href="{{ url_for('item_detail', item_id=item.item_id) }}" class="view-item-button">
+                🔍 View Item
+            </a>
         </div>
     </div>
     {% endfor %}
 </div>
-
-
-</div>
-
+</body>
+</html>
 <script>
+    let isSpeaking = false
     var tablinks = document.getElementsByClassName("tab-links");
     var tabcontents = document.getElementsByClassName("tab-contents");
 
-    function opentab(tabname){
-        for(tablink of tablinks){
+    function opentab(tabname) {
+        for (tablink of tablinks) {
             tablink.classList.remove("active-link")
         }
-        for(tabcontent of tabcontents){
+        for (tabcontent of tabcontents) {
             tabcontent.classList.remove("active-tab")
         }
         event.currentTarget.classList.add("active-link");
         document.getElementById(tabname).classList.add("active-tab");
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
-    const descriptions = document.querySelectorAll('.product-description');
-    const maxWords = 20;  // Maximum number of words to show
+    document.addEventListener('DOMContentLoaded', function () {
+        const descriptions = document.querySelectorAll('.product-description');
+        const maxWords = 20;
 
-    descriptions.forEach(function(description) {
-        let text = description.innerText;
-        let words = text.split(' ');
+        descriptions.forEach(function (description) {
+            let text = description.innerText;
+            let words = text.split(' ');
 
-        if (words.length > maxWords) {
-            // Truncate to maxWords and add ellipsis
-            description.innerText = words.slice(0, maxWords).join(' ') + '...';
-        }
+            if (words.length > maxWords) {
+                description.innerText = words.slice(0, maxWords).join(' ') + '...';
+            }
+        });
     });
-});
+
+    function updateNotifications() {
+        fetch('/notifications')
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error("Error retrieving notifications:", data.error);
+                    return;
+                }
+
+                const badge = document.querySelector('.notification-badge');
+
+                badge.textContent = data.unread_count;
+
+                badge.style.display = data.unread_count > 0 ? "inline-block" : "none";
+            })
+            .catch(error => console.error("Fetch error:", error));
+    }
+
+    updateNotifications();
+
+    setInterval(updateNotifications, 30000);
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const burger = document.getElementById('burger');
+        const navLinks = document.getElementById('navLinks');
+
+        burger.addEventListener('click', () => {
+            navLinks.classList.toggle('show');
+        });
+    });
+
+        function speakText() {
+    if (speechSynthesis.speaking) {
+        speechSynthesis.cancel();
+        isSpeaking = false;
+        return;
+    }
+
+    const bodyText = document.body.innerText;
+    const utterance = new SpeechSynthesisUtterance(bodyText);
+    utterance.rate = 1;
+    utterance.pitch = 1;
+    utterance.volume = 1;
+
+    const voices = speechSynthesis.getVoices();
+    const preferredVoice = voices.find(voice => voice.name.includes("Google") || voice.lang === "en-US");
+    if (preferredVoice) utterance.voice = preferredVoice;
+
+    speechSynthesis.speak(utterance);
+    isSpeaking = true;
+
+    utterance.onend = () => {
+        isSpeaking = false;
+    };
+}
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = new SpeechRecognition();
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+function startListening() {
+  recognition.start();
+  console.log('🎤 Listening...');
+}
+
+recognition.onresult = function(event) {
+  const transcript = event.results[0][0].transcript.toLowerCase();
+  console.log('🗣 You said:', transcript);
+
+  if (transcript.includes('home')) {
+    window.location.href = '/';
+  } else if (transcript.includes('my listings')) {
+    window.location.href = '/my_listings';
+  } else if (transcript.includes('basket')) {
+    window.location.href = '/basket';
+  } else if (transcript.includes('notifications')) {
+    window.location.href = '/notifications_page';
+  } else if (transcript.includes('messages')) {
+    window.location.href = '/chat_inbox';
+  } else if (transcript.includes('log out')) {
+    window.location.href = '/logout';
+  } else if (transcript.includes('my reviews')) {
+    window.location.href = '/reviews';
+  } else if (transcript.includes('purchases')) {
+    window.location.href = '/purchased_items';
+  } else if (transcript.includes('create listing')) {
+    window.location.href = '/Create_listing';
+  }
+  else {
+    alert("Sorry, I didn't understand: " + transcript);
+  }
+};
+
+recognition.onerror = function(event) {
+  console.error('🎤 Error:', event.error);
+};
+
+function resetForm() {
+        // Get the form element
+    const form = document.querySelector('form');
+
+        form.reset();
+
+        const currentUrl = window.location.href;
+        const baseUrl = currentUrl.split('?')[0];
+
+        window.location.href = baseUrl;
+    }
+
 </script>
 
 </body>

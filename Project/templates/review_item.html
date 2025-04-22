@@ -2,9 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Listing</title>
+    <title>Review {{ item.name }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
@@ -56,55 +54,26 @@
         <div class="logo"><h2>E</h2><h1>BUY</h1></div>
     </div>
 </div>
-<div class="tts">
-    <button class="text-to-speech" onclick="speakText()">TTS</button>
-    <button onclick="startListening()">🎙️ Voice Command</button>
-</div>
-<!-- Create Listing Form -->
-<section id="create-listing-section">
-    <form action="{{ url_for('create_listing') }}" method="POST" enctype="multipart/form-data" id="form">
-        <label for="item_name">Item Name:</label>
-        <input type="text" id="item_name" name="item_name" required><br><br>
 
-        <label for="item_description">Item Description:</label>
-        <textarea id="item_description" name="item_description" rows="5" required></textarea><br><br>
-
-
-        <label for="item_price">Price:</label>
-        <input type="number" id="item_price" name="item_price" required step="0.01"><br><br>
-
-        <label for="item_stock_quantity">Stock Quantity</label>
-        <input type="number" id="item_stock_quantity" name="item_stock_quantity" min="1" value="1" required><br>
-
-
-        <label for="item_category">Category:</label>
-        <select id="item_category" name="item_category" required>
-            <option value="electronics">Electronics</option>
-            <option value="fashion">Fashion</option>
-            <option value="home">Home</option>
-            <option value="music">Music</option>
-            <option value="books">Books</option>
-            <option value="toys">Toys & Games</option>
-            <option value="sports">Sports & Outdoors</option>
-            <option value="beauty">Beauty & Personal Care</option>
-            <option value="automotive">Automotive</option>
-            <option value="groceries">Groceries</option>
-            <option value="office">Office Supplies</option>
-            <option value="pets">Pet Supplies</option>
-            <option value="garden">Garden & Outdoors</option>
-            <option value="health">Health & Wellness</option>
-            <option value="jewelry">Jewelry</option>
-            <!-- Add more categories as needed -->
+  <section id="create-listing-section">
+    <h1>Review: {{ item.name }}</h1>
+    <form action="{{ url_for('review_item', item_id=item.item_id) }}" method="POST" id="form">
+        <label for="rating">Rating:</label>
+        <select name="rating" id="rating" required>
+            <option value="">--</option>
+            {% for i in range(1, 6) %}
+                <option value="{{ i }}">{{ i }}</option>
+            {% endfor %}
         </select><br><br>
 
-        <!-- Image Upload Field -->
-        <label for="image">Upload Image:</label>
-        <input type="file" id="image" name="image" accept="image/*" required><br><br>
+        <label for="comment">Comment:</label>
+        <textarea name="comment" id="comment" rows="5" required></textarea><br><br>
 
-        <button type="submit">Submit Listing</button>
+        <button type="submit">Submit Review</button>
     </form>
-</section>
-
+  </section>
+</body>
+</html>
 <script>
     let isSpeaking = false
     var tablinks = document.getElementsByClassName("tab-links");
@@ -235,6 +204,3 @@ recognition.onerror = function(event) {
 };
 
 </script>
-
-</body>
-</html>

@@ -80,129 +80,30 @@ nav ul li a:hover::after {
     text-align: center;
     margin-bottom: 20px;
 }
-.Photo{
-    max-width: 500px;
-    width: 550px;
-    height: 550px;
-    border-radius: 10px;
-    text-align: right;
-}
-
-/*-------------about------------------*/
-
-#about {
-    padding: 50px;
-    color: #fff;
-}
-
-.row {
-    display: flex;   /* Enables horizontal layout */
-    align-items: flex-start; /* Aligns items vertically */
-    gap: 20px; /* Adds space between columns */
-    width: 100%;
-}
-
-.about-col-1 {
-    flex-basis: 35%;
-}
-.about-col-2 h1{
-    margin-bottom: 50px;
-    color: #3A6EA5;
-}
-.about-col-2 {
-    flex-basis: 60%;
-    text-align: left;
-    font-size: 20px;
-}
-
-.Photo2 {
-    width: 100%;
-    max-width: 800px;
-    border-radius: 10px;
-}
-.tabs{
-    display: flex;
-    margin: 20px 0 40px;
-}
-.tab-links{
-    margin-right: 50px;
-    font-size: 20px;
-    font-weight: 500;
-    cursor: pointer;
-    position: relative;
-}
-.tab-links::after{
-    content: '';
-    width: 0;
-    height: 3px;
-    background: #3A6EA5;
-    position: absolute;
-    left: 0;
-    bottom: -8px;
-    transition: 0.5s;
-}
-.tab-links.active-link::after{
-    width: 50%;
-}
-
-.tab-contents ul li{
-    list-style: none;
-    margin: 10px 0;;
-}
-.tab-contents ul li span{
-    color: #3A6EA5;
-    font-size: 15px;
-}
-.tab-contents{
-    display: none;
-}
-.tab-contents.active-tab{
-    display: block;
-}
-/* Personal project section */
-
-#products-sale {
-    background-image: url('../images/sam-dan-truong-ju2NgSoR6pA-unsplash.jpg');
-    background-position: bottom;
-    padding: 20px;
-}
-.Product p {
-    color: #3A6EA5;
-    font-size: 16px;
-    margin-bottom: 10px;
-    word-wrap: break-word; /* Break long words to fit */
-    text-align: center; /* Centers text */
-    line-height: 1.6; /* Increased line spacing */
-    overflow-wrap: break-word; /* Ensures long words break properly */
-    white-space: normal; /* Ensures the text will wrap */
-    word-break: break-word; /* Breaks long words */
-}
-
-
 
 .Item_column {
-    display: flex;  /* Flexbox to align children horizontally */
-    flex-wrap: wrap;  /* Allow wrapping if needed */
-    gap: 20px;  /* Space between the items */
-    justify-content: flex-start;  /* Align to the left */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
     width: 100%;
-    margin-top: 20px; /* To ensure there’s some space between the header and the divs */
+    margin-top: 20px;
 }
 
 .Product {
     display: flex;
-    flex-direction: column;  /* Stack content inside */
-    justify-content: center; /* Center vertically */
-    text-align: center;      /* Centers text inside */
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
     padding: 3px;
     max-width: 400px;
     box-sizing: border-box;
-    width: 300px; /* Set a fixed width for the product box */
-    height: auto; /* Adjust the height based on content */
-    overflow: hidden; /* Prevent content overflow */
-    background: white; /* Optional: background color for visibility */
+    width: 300px;
+    height: auto;
+    overflow: hidden;
+    background: white;
     border-radius: 10px;
-    margin: 10px; /* Optional: margin between items */
+    margin: 10px;
 }
 
 .Product p {
@@ -212,15 +113,15 @@ nav ul li a:hover::after {
     word-wrap: break-word;
     text-align: center;
     line-height: 1.6;
-    white-space: nowrap; /* Ensures text does not wrap to a new line */
-    overflow: hidden; /* Hides anything that overflows */
-    text-overflow: ellipsis; /* Adds '...' at the end when truncated */
-    max-width: 280px; /* Adjust based on your box size */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 280px;
 }
 
 .Product img {
     display: block;
-    margin: 0 auto; /* Ensures image is centered */
+    margin: 0 auto;
 
 }
 
@@ -264,7 +165,7 @@ a{
     text-align: center;
     margin-bottom: 20px;
     font-size: 26px;
-    color: #333;
+    color: white;
 }
 
 
@@ -410,7 +311,7 @@ a{
 
 .search-bar input {
     padding: 10px;
-    width: 700px;
+    width: 500px;
     font-size: 16px;
     border-radius: 5px;
     font-family: monospace;
@@ -511,18 +412,6 @@ a{
     font-size: 26px;
     color: #333;
 }
-
-
-/*#chatbox label {*/
-/*    display: block;*/
-/*    margin-bottom: 8px;*/
-/*    font-weight: bold;*/
-/*    color: #555;*/
-/*    font-size: 16px;*/
-/*}*/
-
-
-
 #chatbox textarea {
     width: 100%;
     max-width: 100%;
@@ -533,14 +422,6 @@ a{
     font-size: 16px;
     box-sizing: border-box;
 }
-
-
-/*#chatbox textarea {*/
-/*    resize: vertical;*/
-/*    min-height: 100px;*/
-/*}*/
-
-
 #chatbox button {
     width: 100%;
     padding: 14px;
@@ -636,7 +517,7 @@ a{
     max-width: 500px;
     margin: 40px auto;
     padding: 20px;
-    background-color: #f9f9fb;
+    background: linear-gradient(200deg, #D90368, #DF2935);
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -645,7 +526,7 @@ a{
 .chat-inbox h3 {
     margin-bottom: 20px;
     font-size: 1.5rem;
-    color: #333;
+    color: white;
     text-align: center;
 }
 
@@ -660,10 +541,10 @@ a{
 
 .chat-inbox a {
     text-decoration: none;
-    color: black;
+    color: white;
     padding: 10px 15px;
     display: block;
-    background-color: #e7f1ff;
+    background-color: #3A6EA5;
     border-radius: 8px;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -799,17 +680,13 @@ table th, table td {
     padding: 15px;
     text-align: left;
     font-size: 16px;
-    color: #333;
+
     border-bottom: 1px solid #ddd;
 }
 
 table th {
     background-color: #3A6EA5;
     color: white;
-}
-
-table tr:hover {
-    background-color: #f0f0f0;
 }
 
 table img {
@@ -889,7 +766,9 @@ input[type="number"] {
     padding: 20px;
     width: 250px;
     text-align: center;
+    font-size: 18px;
     transition: transform 0.2s ease-in-out;
+    font-family: monospace;
 }
 
 .product-card:hover {
@@ -1049,7 +928,6 @@ h1{
     outline: none;
 }
 
-/* Submit button */
 .btn {
     width: 100%;
     padding: 12px;
@@ -1069,28 +947,274 @@ h1{
 .btn:focus {
     outline: none;
 }
-.flashes {
-    list-style: none;
-    padding: 10px;
-    margin: 0;
+
+.burger {
+  display: none;
 }
-.flash {
-    padding: 10px;
+
+.burger {
+  display: none;
+  font-size: 2rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.burger {
+  font-size: 30px;
+  cursor: pointer;
+  display: none;
+}
+
+
+.nav-button {
+  display: inline-block;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+  margin: 4px;
+}
+
+
+/* Burger */
+.burger {
+  display: none;
+  font-size: 30px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Nav */
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  align-items: center;
+}
+.reviews-title {
+    text-align: center;
+    color: white;
+    margin: 30px 0 20px;
+    font-size: 32px;
+}
+
+.reviews-container {
+    width: 90%;
+    max-width: 1000px;
+    margin: 0 auto;
+    background: linear-gradient(200deg, #D90368, #DF2935);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.reviews-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+
+
+.reviews-table th,
+.reviews-table td {
+    word-wrap: break-word; /* Ensures that long words break and wrap to the next line */
+    word-break: break-word; /* Forces breaks in words if they are too long */
+    overflow-wrap: break-word; /* Breaks the text onto a new line if needed */
+    white-space: normal; /* Ensures that the text is not cut off or overflowed horizontally */
+    max-width: 200px; /* Optional: You can limit the width of the comment column */
+    color: white;
+}
+
+
+.no-reviews {
+    text-align: center;
+    color: #777;
+    margin-top: 40px;
+}
+
+.alert.danger {
+    color: red;
+    text-align: center;
+    font-size: 20px;
+}
+.reviews-table tr:hover {
+    background-color: transparent;
+}
+
+@media (max-width: 768px) {
+  /* General Layout */
+  .container,
+  .header,
+  .row,
+  .Item_column,
+  .inspect_item_column,
+  .panel-grid,
+  .panel-grid2,
+  .search-bar,
+  .filter-section,
+  .tabs {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .headtext h1,
+  .basket-div h1,
+  .logo h1,
+  .logo h2 {
+    font-size: 30px;
+  }
+
+  /* Navigation */
+  .burger {
+    display: block;
+    font-size: 30px;
+    cursor: pointer;
+    color: #333;
+    user-select: none;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background-color: black;
+    padding: 1rem;
+    z-index: 1000;
+    border: 1px solid #ccc;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  .nav-links li {
+    margin: 10px 0;
+    text-align: center;
+  }
+
+  /* Form Elements */
+  .search-bar input,
+  .search-bar button,
+  .filter-section input,
+  .filter-section select,
+  .filter-section button {
+    width: 90%;
     margin-bottom: 10px;
-    border-radius: 4px;
+  }
+
+  /* Product Display */
+  .Product,
+  .inspect_Product,
+  .panel,
+  .basket-div,
+  #form,
+  #chatbox {
+    width: 90% !important;
+    padding: 20px;
+  }
+
+  .Product h2,
+  .inspect_Product h2 {
+    font-size: 22px;
+  }
+
+  .Product p,
+  .inspect_Product p {
+    font-size: 14px;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+
+  .Photo, .Photo2 {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+  }
+
+  .about-col-1,
+  .about-col-2 {
+    flex-basis: 100%;
+    width: 100%;
+  }
+
+  /* Tables */
+  table {
+    font-size: 14px;
+    overflow-x: auto;
+    display: block;
+  }
+
+  /* Tabs */
+  .tab-links {
+    font-size: 16px;
+    margin: 0 0 10px;
+  }
 }
-.flash.success {
-    background-color: #d4edda;
-    color: #155724;
+.tts{
+    text-align: center;
 }
-.flash.warning {
-    background-color: #fff3cd;
-    color: #856404;
+.alert.alert-danger{
+    color: red;
+    text-align: center;
+    font-size: 20px;
 }
-.flash.danger {
+.user-greeting {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: white;
+    text-align: center;
+}
+.icons {
+    display: flex;
+    align-items: center;  /* vertically center icons */
+    gap: 16px;            /* space between icons */
+}
+.profile-icon{
+    width: 70px;
+    color: #555;
+}
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.alert-danger {
     background-color: #f8d7da;
     color: #721c24;
 }
 
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
 
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+table tr:hover {
+    background-color: inherit; /* Keep the background color the same */
+    cursor: default; /* Change the cursor to default (no hand pointer) */
+}
+.view-item-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3A6EA5; /* green shade */
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 12px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.view-item-button:hover {
+    background-color: #5E96D1;
+}
 

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+<div class="header">
+    <div class="container">
+        <div class="navbar">
+            <div class="burger" id="burger">
+                ☰
+            </div>
+            <nav>
+                <ul class="nav-links" id="navLinks">
+                    <li><a class="nav-button" href="/admin_dashboard">Home</a></li>
+                    <li><a class="nav-button" href="/purchased_items">Banned accounts</a></li>
+                    <li><a class="nav-button" href="/reviews">My reviews</a></li>
+                    <li><a class="nav-button" href="/Create_listing">Create listing</a></li>
+                    <li><a class="nav-button" href="/chat_inbox">Messages</a></li>
+                    <li><a class="nav-button" href="/my_listings">My listings</a></li>
+                    <li><a class="nav-button" href="/logout">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+    <h1>All Users</h1>
+    {% if users %}
+        <table>
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Admin Status</th>
+                    <th>Ban Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.user_id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ 'Yes' if user.is_admin else 'No' }}</td>
+                        <td>{{ 'Banned' if user.is_banned else 'Active' }}</td>
+                        <td>
+                            {% if user.is_banned %}
+                                <!-- If user is banned, show Unban button -->
+                                <form action="{{ url_for('unban_user', user_id=user.user_id) }}" method="POST">
+                                    <button type="submit" class="btn btn-success">Unban User</button>
+                                </form>
+                            {% else %}
+                                <!-- If user is not banned, show Ban button -->
+                                <form action="{{ url_for('ban_user', user_id=user.user_id) }}" method="POST">
+                                    <button type="submit" class="btn btn-danger">Ban User</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No users found.</p>
+    {% endif %}
+</body>
+</html>
+

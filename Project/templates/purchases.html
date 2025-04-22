@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Listing</title>
+    <title>My Purchases and Reviews</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+
 <div class="header">
     <div class="container">
         <div class="navbar">
@@ -60,50 +60,27 @@
     <button class="text-to-speech" onclick="speakText()">TTS</button>
     <button onclick="startListening()">🎙️ Voice Command</button>
 </div>
-<!-- Create Listing Form -->
-<section id="create-listing-section">
-    <form action="{{ url_for('create_listing') }}" method="POST" enctype="multipart/form-data" id="form">
-        <label for="item_name">Item Name:</label>
-        <input type="text" id="item_name" name="item_name" required><br><br>
+    <h1>My Purchases</h1>
+    {% if purchases %}
+        <div class="product-list">
+            {% for purchase in purchases %}
+            <div class="product-card">
+                <h3>{{ purchase.item_name }}</h3>
+                <img src="{{ url_for('item_image', item_id=purchase.item_id) }}" alt="{{ purchase.item_name }}" width="200">
+                <p>Quantity: {{ purchase.quantity }}</p>
+                <p>Total: ${{ purchase.total_price }}</p>
+                <p>Date: {{ purchase.purchase_date }}</p>
+                <a href="{{ url_for('review_item', item_id=purchase.item_id) }}">
+                <button type="submit" class="btn btn-success">review item</button>
+                </a>
+            </div>
+    {% endfor %}
 
-        <label for="item_description">Item Description:</label>
-        <textarea id="item_description" name="item_description" rows="5" required></textarea><br><br>
-
-
-        <label for="item_price">Price:</label>
-        <input type="number" id="item_price" name="item_price" required step="0.01"><br><br>
-
-        <label for="item_stock_quantity">Stock Quantity</label>
-        <input type="number" id="item_stock_quantity" name="item_stock_quantity" min="1" value="1" required><br>
-
-
-        <label for="item_category">Category:</label>
-        <select id="item_category" name="item_category" required>
-            <option value="electronics">Electronics</option>
-            <option value="fashion">Fashion</option>
-            <option value="home">Home</option>
-            <option value="music">Music</option>
-            <option value="books">Books</option>
-            <option value="toys">Toys & Games</option>
-            <option value="sports">Sports & Outdoors</option>
-            <option value="beauty">Beauty & Personal Care</option>
-            <option value="automotive">Automotive</option>
-            <option value="groceries">Groceries</option>
-            <option value="office">Office Supplies</option>
-            <option value="pets">Pet Supplies</option>
-            <option value="garden">Garden & Outdoors</option>
-            <option value="health">Health & Wellness</option>
-            <option value="jewelry">Jewelry</option>
-            <!-- Add more categories as needed -->
-        </select><br><br>
-
-        <!-- Image Upload Field -->
-        <label for="image">Upload Image:</label>
-        <input type="file" id="image" name="image" accept="image/*" required><br><br>
-
-        <button type="submit">Submit Listing</button>
-    </form>
-</section>
+        </div>
+    {% else %}
+        <p>You haven’t purchased anything yet.</p>
+    {% endif %}
+</div>
 
 <script>
     let isSpeaking = false
@@ -233,8 +210,6 @@ recognition.onresult = function(event) {
 recognition.onerror = function(event) {
   console.error('🎤 Error:', event.error);
 };
-
 </script>
-
 </body>
 </html>

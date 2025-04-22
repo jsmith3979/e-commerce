@@ -10,93 +10,75 @@
 <body>
 <div class="header">
     <div class="container">
-        <nav>
-            <ul>
-                <li><a href="/dashboard">Home</a></li>
-                <li><a href="#">Reviews</a></li>
-                <li><a href="/Create_listing">Create listing</a></li>
-                <li><a href="/chat_inbox">Messages</a></li>
-                <li><a href="/my_listings">My listings</a></li>
-
-            </ul>
-        </nav>
+        <div class="navbar">
+            <div class="burger" id="burger">
+                ☰
+            </div>
+            <nav>
+                <ul class="nav-links" id="navLinks">
+                    <li><a class="nav-button" href="/dashboard">Home</a></li>
+                    <li><a class="nav-button" href="/purchased_items">My Purchases</a></li>
+                    <li><a class="nav-button" href="/reviews">My reviews</a></li>
+                    <li><a class="nav-button" href="/Create_listing">Create listing</a></li>
+                    <li><a class="nav-button" href="/chat_inbox">Messages</a></li>
+                    <li><a class="nav-button" href="/my_listings">My listings</a></li>
+                    <li><a class="nav-button" href="/logout">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
         <div class="search-bar">
             <form action="{{ url_for('search') }}" method="GET">
                 <input type="text" name="query" placeholder="Search for items..." value="{{ query if query else '' }}" required>
                 <button type="submit">Search</button>
             </form>
         </div>
-        <nav>
-            <ul>
-                <li><a href="/logout">Logout</a></li>
-            </ul>
-        </nav>
-        <div class="notification-container">
-            <a href="{{ url_for('notifications_page') }}">
-                <svg class="notification-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M12 2C10.346 2 9 3.346 9 5v1.07C6.159 7.16 4 9.94 4 13v4l-2 2v1h20v-1l-2-2v-4c0-3.06-2.159-5.84-5-6.93V5c0-1.654-1.346-3-3-3zm1 18h-2v-2h2v2zm6-4H5v-1c0-2.757 2.243-5 5-5h6c2.757 0 5 2.243 5 5v1z"/>
-                </svg>
-                <span class="notification-badge"></span>
-            </a>
+        <div class="icons">
+            <div class="notification-container">
+                <a href="{{ url_for('notifications_page') }}"  aria-label="Notifications">
+                    <svg class="notification-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 2C10.346 2 9 3.346 9 5v1.07C6.159 7.16 4 9.94 4 13v4l-2 2v1h20v-1l-2-2v-4c0-3.06-2.159-5.84-5-6.93V5c0-1.654-1.346-3-3-3zm1 18h-2v-2h2v2zm6-4H5v-1c0-2.757 2.243-5 5-5h6c2.757 0 5 2.243 5 5v1z"/>
+                    </svg>
+                    <span class="notification-badge"></span>
+                </a>
+            </div>
+            <div class="basket-container">
+                <a href="{{ url_for('basket_page') }}"  aria-label="Basket">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="basket-icon" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1
+                        0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zM7.16
+                        14l.84-2h8.6c.75 0 1.41-.41 1.75-1.03l3.58-6.49-.94-.33L17.25
+                        10H8.53l-1.1-2H1v2h4l3.6 7.59-1.35 2.44C6.52 19.37 7.48
+                        21 9 21h12v-2H9.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75
+                        0 1.41-.41 1.75-1.03L23 6H6.42l-.94-2H1V2h4.42l3.6 7.59L7.16 14z"/>
+                    </svg>
+                </a>
+            </div>
+            <div class="profile-container">
+                <a href="{{ url_for('profile') }}" aria-label="Profile">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="profile-icon" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+                    </svg>
+                </a>
+            </div>
         </div>
-
-        <div class="basket-container">
-            <a href="{{ url_for('basket_page') }}">
-                <svg xmlns="http://www.w3.org/2000/svg" class="basket-icon" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1
-                    0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zM7.16
-                    14l.84-2h8.6c.75 0 1.41-.41 1.75-1.03l3.58-6.49-.94-.33L17.25
-                    10H8.53l-1.1-2H1v2h4l3.6 7.59-1.35 2.44C6.52 19.37 7.48
-                    21 9 21h12v-2H9.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75
-                    0 1.41-.41 1.75-1.03L23 6H6.42l-.94-2H1V2h4.42l3.6 7.59L7.16 14z"/>
-                </svg>
-            </a>
-        </div>
-
         <div class="logo"><h2>E</h2><h1>BUY</h1></div>
     </div>
-<!--    <div class="filter-section">-->
-<!--    <form method="GET" action="{{ url_for('logged_home') }}">-->
-<!--        <label for="category">Category:</label>-->
-<!--        <select name="category" id="category">-->
-<!--            <option value="">All</option>-->
-<!--            {% for cat in categories %}-->
-<!--            <option value="{{ cat }}" {% if request.args.get('category') == cat %} selected {% endif %}>{{ cat }}</option>-->
-<!--            {% endfor %}-->
-<!--        </select>-->
-
-<!--        <label for="price_min">Min Price:</label>-->
-<!--        <input type="number" name="price_min" id="price_min" placeholder="0" min="0" max="100000" value="{{ request.args.get('price_min', '') }}">-->
-
-<!--        <label for="price_max">Max Price:</label>-->
-<!--        <input type="number" name="price_max" id="price_max" placeholder="0" min="0" max="100000" value="{{ request.args.get('price_max', '') }}">-->
-
-<!--        <button type="submit">Filter</button>-->
-<!--        <a href="{{ url_for('Unlogged_home') }}"><button type="button">Reset</button></a>-->
-<!--    </form>-->
-<!--</div>-->
-<!--<div class="Item_column">-->
-<!--    {% for item in items %}-->
-<!--    <div class="Product">-->
-<!--        <div>-->
-<!--            <h2>{{ item.name }}</h2>-->
-<!--            <p>Seller: {{ item.username }}</p>-->
-<!--            <p>Price: ${{ item.price }}</p>-->
-<!--            <p>Category: {{ item.category }}</p>-->
-
-<!--            <img src="{{ url_for('item_image', item_id=item.item_id) }}" alt="{{ item.name }} Image" width="200" height="200">-->
-
-<!--            <p class="description">Description: {{ item.description }}</p>-->
-
-<!--            &lt;!&ndash; Separate the "View Item" link to make sure it's always visible &ndash;&gt;-->
-<!--            <a href="/item/{{ item.item_id }}" class="view-item-link">View Item</a>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    {% endfor %}-->
-<!--</div>-->
-
 </div>
+{% if username %}
+    <div class="user-greeting">
+        {% if is_admin %}
+            Welcome back, <strong>Admin {{ username }}</strong>! 👑
+        {% else %}
+            Welcome back, <strong>{{ username }}</strong>! 👋
+        {% endif %}
+    </div>
+{% endif %}
 
+
+<div class="tts">
+    <button class="text-to-speech" onclick="speakText()">TTS</button>
+    <button onclick="startListening()">🎙️ Voice Command</button>
+</div>
 <div class="panel-grid">
   <a href="{{ url_for('search', category='Home') }}" class="panel">
     <img src="{{ url_for('static', filename='images/DesktopHeader-P386_NWT008_NWT005_NWT009_B.jpg.jpeg') }}" alt="Deals" />
@@ -168,17 +150,19 @@
 </div>
 
 <div class="panel-grid">
-    <a href="{{ url_for('search', category='Books') }}" class="panel">
-        <img src="{{ url_for('static', filename='images/istockphoto-1257170567-640x640.jpg') }}" alt="Books" />
+    <a href="{{ url_for('search', most_sold=1) }}" class="panel">
+        <img src="{{ url_for('static', filename='images/67c055e09f7d7d001d9227bf.jpg') }}" alt="Best Sellers" />
         <div class="panel-content">
-            <h3>New Deals</h3>
+            <h3>🔥 Best Seller</h3>
+            <p>Click to see the most sold items</p>
         </div>
     </a>
 
-    <a href="{{ url_for('search', category='Books') }}" class="panel">
-        <img src="{{ url_for('static', filename='images/istockphoto-1135222849-612x612.jpg') }}" alt="Books" />
+    <a href="{{ url_for('search', new_deals=1) }}" class="panel">
+        <img src="{{ url_for('static', filename='images/istockphoto-1135222849-612x612.jpg') }}" alt="New Deals" />
         <div class="panel-content">
-            <h3>Best sellers</h3>
+            <h3>✨ New Deals</h3>
+            <p>Discover our latest arrivals and special offers!</p>
         </div>
     </a>
 
@@ -190,61 +174,134 @@
     </a>
 
 </div>
-
 <script>
+    let isSpeaking = false
     var tablinks = document.getElementsByClassName("tab-links");
     var tabcontents = document.getElementsByClassName("tab-contents");
 
-    function opentab(tabname){
-        for(tablink of tablinks){
+    function opentab(tabname) {
+        for (tablink of tablinks) {
             tablink.classList.remove("active-link")
         }
-        for(tabcontent of tabcontents){
+        for (tabcontent of tabcontents) {
             tabcontent.classList.remove("active-tab")
         }
         event.currentTarget.classList.add("active-link");
         document.getElementById(tabname).classList.add("active-tab");
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
-    const descriptions = document.querySelectorAll('.product-description');
-    const maxWords = 20;  // Maximum number of words to show
+    document.addEventListener('DOMContentLoaded', function () {
+        const descriptions = document.querySelectorAll('.product-description');
+        const maxWords = 20;
 
-    descriptions.forEach(function(description) {
-        let text = description.innerText;
-        let words = text.split(' ');
+        descriptions.forEach(function (description) {
+            let text = description.innerText;
+            let words = text.split(' ');
 
-        if (words.length > maxWords) {
-            // Truncate to maxWords and add ellipsis
-            description.innerText = words.slice(0, maxWords).join(' ') + '...';
-        }
-    });
-});
-
-
-      // Function to update the notification badge dynamically
-    function updateNotifications() {
-      fetch('/notifications')
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                console.error("Error retrieving notifications:", data.error);
-                return;
+            if (words.length > maxWords) {
+                description.innerText = words.slice(0, maxWords).join(' ') + '...';
             }
-            // Find the badge element
-            const badge = document.querySelector('.notification-badge');
-            // Update the text content with the unread notifications count
-            badge.textContent = data.unread_count;
-            // If count is zero, optionally hide the badge; otherwise, show it
-            badge.style.display = data.unread_count > 0 ? "inline-block" : "none";
-        })
-        .catch(error => console.error("Fetch error:", error));
+        });
+    });
+
+    function updateNotifications() {
+        fetch('/notifications')
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error("Error retrieving notifications:", data.error);
+                    return;
+                }
+
+                const badge = document.querySelector('.notification-badge');
+
+                badge.textContent = data.unread_count;
+
+                badge.style.display = data.unread_count > 0 ? "inline-block" : "none";
+            })
+            .catch(error => console.error("Fetch error:", error));
     }
 
-    // Update notifications immediately on page load
     updateNotifications();
-    // Set an interval (e.g., every 30 seconds) to update the badge dynamically
+
     setInterval(updateNotifications, 30000);
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const burger = document.getElementById('burger');
+        const navLinks = document.getElementById('navLinks');
+
+        burger.addEventListener('click', () => {
+            navLinks.classList.toggle('show');
+        });
+    });
+
+        function speakText() {
+    if (speechSynthesis.speaking) {
+        speechSynthesis.cancel();
+        isSpeaking = false;
+        return;
+    }
+
+    const bodyText = document.body.innerText;
+    const utterance = new SpeechSynthesisUtterance(bodyText);
+    utterance.rate = 1;
+    utterance.pitch = 1;
+    utterance.volume = 1;
+
+    const voices = speechSynthesis.getVoices();
+    const preferredVoice = voices.find(voice => voice.name.includes("Google") || voice.lang === "en-US");
+    if (preferredVoice) utterance.voice = preferredVoice;
+
+    speechSynthesis.speak(utterance);
+    isSpeaking = true;
+
+    utterance.onend = () => {
+        isSpeaking = false;
+    };
+}
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = new SpeechRecognition();
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+function startListening() {
+  recognition.start();
+  console.log('🎤 Listening...');
+}
+
+recognition.onresult = function(event) {
+  const transcript = event.results[0][0].transcript.toLowerCase();
+  console.log('🗣 You said:', transcript);
+
+  if (transcript.includes('home')) {
+    window.location.href = '/';
+  } else if (transcript.includes('my listings')) {
+    window.location.href = '/my_listings';
+  } else if (transcript.includes('basket')) {
+    window.location.href = '/basket';
+  } else if (transcript.includes('notifications')) {
+    window.location.href = '/notifications_page';
+  } else if (transcript.includes('messages')) {
+    window.location.href = '/chat_inbox';
+  } else if (transcript.includes('log out')) {
+    window.location.href = '/logout';
+  } else if (transcript.includes('my reviews')) {
+    window.location.href = '/reviews';
+  } else if (transcript.includes('purchases')) {
+    window.location.href = '/purchased_items';
+  } else if (transcript.includes('create listing')) {
+    window.location.href = '/Create_listing';
+  }
+  else {
+    alert("Sorry, I didn't understand: " + transcript);
+  }
+};
+
+recognition.onerror = function(event) {
+  console.error('🎤 Error:', event.error);
+};
 </script>
 
 </body>
