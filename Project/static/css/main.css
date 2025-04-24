@@ -1051,6 +1051,8 @@ h1{
   .panel-grid,
   .panel-grid2,
   .search-bar,
+  .search-bar1,
+  .search-bar2,
   .filter-section,
   .tabs {
     flex-direction: column;
@@ -1218,3 +1220,60 @@ table tr:hover {
     background-color: #5E96D1;
 }
 
+#tr1 {
+    color: black;
+}
+
+.search-bar1 {
+    margin: 20px 0;
+    text-align: center;
+
+}
+
+.search-bar1 input {
+    padding: 10px;
+    width: 1100px;
+    font-size: 16px;
+    border-radius: 5px;
+    font-family: monospace;
+}
+
+.search-bar1 button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: monospace;
+    border-radius: 5px;
+}
+.search-bar2 {
+    margin: 20px 0;
+    text-align: center;
+
+}
+.search-bar2 input {
+    padding: 10px;
+    width: 400px;
+    font-size: 16px;
+    border-radius: 5px;
+    font-family: monospace;
+}
+
+.search-bar2 button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: monospace;
+    border-radius: 5px;
+}
+
+@media (max-width: 600px) {
+    .search-bar1 form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-bar1 input[type="text"],
+    .search-bar1 button {
+        width: 100%;
+    }
+}

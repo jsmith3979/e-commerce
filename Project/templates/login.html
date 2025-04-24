@@ -36,10 +36,6 @@
     {% endwith %}
 
     <h1>Enter your details:</h1>
-    <div>
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required />
-    </div>
 
     <div>
         <label for="email">Email:</label>
@@ -59,15 +55,14 @@
 </form>
 
 <script>
-    // Function to toggle the visibility of the password
     function togglePassword() {
         const passwordField = document.getElementById('password');
         const showPasswordCheckbox = document.getElementById('showPassword');
 
         if (showPasswordCheckbox.checked) {
-            passwordField.type = 'text'; // Show password
+            passwordField.type = 'text';
         } else {
-            passwordField.type = 'password'; // Hide password
+            passwordField.type = 'password';
         }
     }
 

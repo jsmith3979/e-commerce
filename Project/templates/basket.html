@@ -10,47 +10,55 @@
 <div class="header">
     <div class="container">
         <div class="navbar">
-                <div class="burger" id="burger">
-                    ☰
-                </div>
-                    <nav>
-                        <ul class="nav-links" id="navLinks">
-                          <li><a class="nav-button" href="/dashboard">Home</a></li>
-                          <li><a class="nav-button" href="/purchased_items">My Purchases</a></li>
-                          <li><a class="nav-button" href="/reviews">My reviews</a></li>
-                          <li><a class="nav-button" href="/Create_listing">Create listing</a></li>
-                          <li><a class="nav-button" href="/chat_inbox">Messages</a></li>
-                          <li><a class="nav-button" href="/my_listings">My listings</a></li>
-                          <li><a class="nav-button" href="/logout">Logout</a></li>
-                        </ul>
-                    </nav>
-                </div>
+            <div class="burger" id="burger">
+                ☰
+            </div>
+            <nav>
+                <ul class="nav-links" id="navLinks">
+                    <li><a class="nav-button" href="/dashboard">Home</a></li>
+                    <li><a class="nav-button" href="/purchased_items">My Purchases</a></li>
+                    <li><a class="nav-button" href="/reviews">My reviews</a></li>
+                    <li><a class="nav-button" href="/Create_listing">Create listing</a></li>
+                    <li><a class="nav-button" href="/chat_inbox">Messages</a></li>
+                    <li><a class="nav-button" href="/my_listings">My listings</a></li>
+                    <li><a class="nav-button" href="/logout">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
         <div class="search-bar">
             <form action="{{ url_for('search') }}" method="GET">
                 <input type="text" name="query" placeholder="Search for items..." value="{{ query if query else '' }}" required>
                 <button type="submit">Search</button>
             </form>
         </div>
-        <div class="notification-container">
-            <a href="{{ url_for('notifications_page') }}">
-                <svg class="notification-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M12 2C10.346 2 9 3.346 9 5v1.07C6.159 7.16 4 9.94 4 13v4l-2 2v1h20v-1l-2-2v-4c0-3.06-2.159-5.84-5-6.93V5c0-1.654-1.346-3-3-3zm1 18h-2v-2h2v2zm6-4H5v-1c0-2.757 2.243-5 5-5h6c2.757 0 5 2.243 5 5v1z"/>
-                </svg>
-                <span class="notification-badge"></span>
-            </a>
-        </div>
-
-        <div class="basket-container">
-            <a href="{{ url_for('basket_page') }}">
-                <svg xmlns="http://www.w3.org/2000/svg" class="basket-icon" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1
-                    0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zM7.16
-                    14l.84-2h8.6c.75 0 1.41-.41 1.75-1.03l3.58-6.49-.94-.33L17.25
-                    10H8.53l-1.1-2H1v2h4l3.6 7.59-1.35 2.44C6.52 19.37 7.48
-                    21 9 21h12v-2H9.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75
-                    0 1.41-.41 1.75-1.03L23 6H6.42l-.94-2H1V2h4.42l3.6 7.59L7.16 14z"/>
-                </svg>
-            </a>
+        <div class="icons">
+            <div class="notification-container">
+                <a href="{{ url_for('notifications_page') }}"  aria-label="Notifications">
+                    <svg class="notification-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 2C10.346 2 9 3.346 9 5v1.07C6.159 7.16 4 9.94 4 13v4l-2 2v1h20v-1l-2-2v-4c0-3.06-2.159-5.84-5-6.93V5c0-1.654-1.346-3-3-3zm1 18h-2v-2h2v2zm6-4H5v-1c0-2.757 2.243-5 5-5h6c2.757 0 5 2.243 5 5v1z"/>
+                    </svg>
+                    <span class="notification-badge"></span>
+                </a>
+            </div>
+            <div class="basket-container">
+                <a href="{{ url_for('basket_page') }}"  aria-label="Basket">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="basket-icon" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1
+                        0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zM7.16
+                        14l.84-2h8.6c.75 0 1.41-.41 1.75-1.03l3.58-6.49-.94-.33L17.25
+                        10H8.53l-1.1-2H1v2h4l3.6 7.59-1.35 2.44C6.52 19.37 7.48
+                        21 9 21h12v-2H9.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75
+                        0 1.41-.41 1.75-1.03L23 6H6.42l-.94-2H1V2h4.42l3.6 7.59L7.16 14z"/>
+                    </svg>
+                </a>
+            </div>
+            <div class="profile-container">
+                <a href="{{ url_for('profile') }}" aria-label="Profile">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="profile-icon" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+                    </svg>
+                </a>
+            </div>
         </div>
         <div class="logo"><h2>E</h2><h1>BUY</h1></div>
     </div>
@@ -74,7 +82,7 @@
                 </tr>
 
                 {% for item in basket_items %}
-                <tr>
+                <tr id="tr1">
                     <td>
                         <img src="{{ url_for('item_image', item_id=item.item_id) }}" alt="{{ item.name }}" width="50" height="50">
                         {{ item.name }}

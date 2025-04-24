@@ -391,7 +391,7 @@ def item_detail(item_id):
                     """
                     cursor.execute(basket_query, (session['user_id'], item_id))
                     existing_item = cursor.fetchone()
-                    if existing_item:  # If item already exists, update quantity
+                    if existing_item:
                         new_quantity = existing_item['quantity'] + quantity
                         if new_quantity > item['stock_quantity']:
                             flash(
@@ -404,7 +404,7 @@ def item_detail(item_id):
                         WHERE user_id = %s AND item_id = %s
                         """
                         cursor.execute(update_query, (new_quantity, session['user_id'], item_id))
-                    else:  # If item doesn't exist, insert a new row
+                    else:
                         insert_query = """
                         INSERT INTO basket (user_id, item_id, quantity)
                         VALUES (%s, %s, %s)
@@ -588,8 +588,10 @@ def send_message():
 
             connection.commit()
             return redirect(url_for('chat', user_id=receiver_id, item_id=item_id))
-        except Error as e:
+        except Exception as e:
             flash(f"Error sending message: {e}", "danger")
+            return render_template('error.html', message='Error sending message'), 200
+
         finally:
             cursor.close()
             connection.close()
