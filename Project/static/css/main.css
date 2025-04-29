@@ -620,7 +620,7 @@ a1{
 .basket-container {
     position: relative;
     display: inline-block;
-    margin-left: 20px;
+
 }
 
 .basket-icon {
@@ -978,6 +978,7 @@ h1{
 .nav-links {
   display: flex;
   gap: 1.5rem;
+  justify-content: space-between;
   list-style: none;
   align-items: center;
 }
@@ -1481,10 +1482,10 @@ table tr:hover {
 }
 
 .navbar {
-    display: flex;
     align-items: center;
     width: 100%; /* Take full width on smaller screens */
     justify-content: space-between; /* Space out burger and nav on small screens */
+
 }
 
 nav ul {
