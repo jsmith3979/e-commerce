@@ -33,12 +33,35 @@
                 </ul>
             </nav>
         </div>
+    <form action="{{ url_for('search') }}" method="GET">
         <div class="{{ 'search-bar' if session.get('user_id') else 'search-bar1' }}">
-            <form action="{{ url_for('search') }}" method="GET">
-                <input type="text" name="query" placeholder="Search for items..." value="{{ query if query else '' }}" required>
-                <button type="submit">Search</button>
-            </form>
+            <input type="text" name="query" placeholder="Search for items..." value="{{ query if query else '' }}">
+            <button type="submit">Search</button>
         </div>
+
+        <label for="category">Category:</label>
+        <select name="category" id="category">
+            <option value="">All</option>
+            {% for cat in categories %}
+            <option value="{{ cat }}" {% if request.args.get('category') == cat %} selected {% endif %}>{{ cat }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="price_min">Min Price:</label>
+        <input type="number" name="price_min" id="price_min" placeholder="0" min="0" max="100000" value="{{ request.args.get('price_min', '') }}">
+
+        <label for="price_max">Max Price:</label>
+        <input type="number" name="price_max" id="price_max" placeholder="0" min="0" max="100000" value="{{ request.args.get('price_max', '') }}">
+
+        <label for="most_sold">
+            <input type="checkbox" name="most_sold" id="most_sold" {% if most_sold %} checked {% endif %}>
+            Most Sold
+        </label>
+
+        <button type="submit">Filter</button>
+        <button type="button" onclick="resetForm()">Reset</button>
+    </form>
+
         <div class="icons">
             <div class="notification-container">
                 <a href="{{ url_for('notifications_page') }}"  aria-label="Notifications">
@@ -72,31 +95,7 @@
     </div>
 </div>
 
-<div class="filter-section">
-    <form method="GET" action="{{ url_for('search') }}">
-        <label for="category">Category:</label>
-        <select name="category" id="category">
-            <option value="">All</option>
-            {% for cat in categories %}
-            <option value="{{ cat }}" {% if request.args.get('category') == cat %} selected {% endif %}>{{ cat }}</option>
-            {% endfor %}
-        </select>
 
-        <label for="price_min">Min Price:</label>
-        <input type="number" name="price_min" id="price_min" placeholder="0" min="0" max="100000" value="{{ request.args.get('price_min', '') }}">
-
-        <label for="price_max">Max Price:</label>
-        <input type="number" name="price_max" id="price_max" placeholder="0" min="0" max="100000" value="{{ request.args.get('price_max', '') }}">
-
-        <label for="most_sold">
-            <input type="checkbox" name="most_sold" id="most_sold" {% if most_sold %} checked {% endif %}>
-            Most Sold
-        </label>
-
-        <button type="submit">Filter</button>
-        <button type="button" onclick="resetForm()">Reset</button>
-    </form>
-</div>
 
 <div class="Item_column {% if show_admin_favorites %}admin-favorites{% endif %}">
     {% for item in items %}
@@ -111,7 +110,6 @@
             <img src="{{ url_for('item_image', item_id=item.item_id) }}" alt="{{ item.name }} Image" width="200" height="200">
 
             <p class="description">Description: {{ item.description }}</p>
-            <p class="sold-count">Sold: {{ item.total_sold }} times</p>
 
             <a href="{{ url_for('item_detail', item_id=item.item_id) }}" class="view-item-button">
                 🔍 View Item
@@ -241,6 +239,8 @@ recognition.onresult = function(event) {
     window.location.href = '/purchased_items';
   } else if (transcript.includes('create listing')) {
     window.location.href = '/Create_listing';
+  } else if (transcript.includes('profile')) {
+    window.location.href = '/profile';
   }
   else {
     alert("Sorry, I didn't understand: " + transcript);

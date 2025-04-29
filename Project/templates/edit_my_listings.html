@@ -26,7 +26,7 @@
         </div>
         <div class="search-bar">
             <form action="{{ url_for('search') }}" method="GET">
-                <input type="text" name="query" placeholder="Search for items..." value="{{ query if query else '' }}" required>
+                <input type="text" name="query" placeholder="Search for items..." value="{{ query if query else '' }}" >
                 <button type="submit">Search</button>
             </form>
         </div>
@@ -69,10 +69,14 @@
     <h1>Edit Listing</h1>
 
 
-<form action="{{ url_for('update_item', item_id=item.item_id) }}" method="POST" class="edit-item-form">
+<form action="{{ url_for('update_item', item_id=item.item_id) }}" method="POST" enctype="multipart/form-data" class="edit-item-form">
 
     <div class="image-container">
         <img src="{{ url_for('item_image', item_id=item.item_id) }}" alt="{{ item.name }}" class="item-image">
+    </div>
+    <div class="form-group">
+        <label for="new_photo"><strong>Upload New Photo:</strong></label>
+        <input type="file" name="new_photo" id="new_photo" accept="image/*" class="form-control">
     </div>
 
     <div class="form-group">
@@ -235,6 +239,8 @@ recognition.onresult = function(event) {
     window.location.href = '/purchased_items';
   } else if (transcript.includes('create listing')) {
     window.location.href = '/Create_listing';
+  } else if (transcript.includes('profile')) {
+    window.location.href = '/profile';
   }
   else {
     alert("Sorry, I didn't understand: " + transcript);

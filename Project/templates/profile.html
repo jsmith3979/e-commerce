@@ -28,7 +28,7 @@
         </div>
         <div class="search-bar">
             <form action="{{ url_for('search') }}" method="GET">
-                <input type="text" name="query" placeholder="Search for items..." value="{{ query if query else '' }}" required>
+                <input type="text" name="query" placeholder="Search for items..." value="{{ query if query else '' }}">
                 <button type="submit">Search</button>
             </form>
         </div>
@@ -71,44 +71,63 @@
 </div>
 <div id="form">
     <h1>Your Profile</h1>
-    <p>Username: {{ user.username }}</p>
-    <p>Email: {{ user.email }}</p>
+    <h1>Username: {{ user.username }}</h1>
+    <h1>Email: {{ user.email }}</h1>
+    {% if user.profile_picture %}
+        <div class="profile-container1">
+            <img src="data:image/{{ user.mime_type }};base64,{{ user.profile_picture | b64encode }}"
+                alt="Profile Picture"
+                class="profile-picture1">
+        </div>
+    {% else %}
+        <div class="profile-container1">
+            <img src="{{ url_for('static', filename='images/Default_pfp.jpg') }}" alt="Seller Profile Picture" class="profile-picture1">
+        </div>
+    {% endif %}
 
-    <form action="{{ url_for('delete_user') }}" method="POST" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone!')">
-        <button type="submit">Delete Account</button>
+    <form action="{{ url_for('upload_profile_picture') }}" method="POST" enctype="multipart/form-data">
+        <label for="profile_picture"></label><br>
+        <input type="file" id="profile_picture" name="profile_picture" accept="image/*" required><br><br>
+        <button type="submit">Upload Picture</button>
     </form>
+
     <form action="{{ url_for('change_password') }}" method="POST">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div>
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">{{ message }}</div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
-            <div>
-        <label for="current_password">Current Password:</label>
-        <input type="password" id="current_password" name="current_password" required />
-    </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div>
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <div>
+            <label for="current_password">Current Password:</label>
+            <input type="password" id="current_password" name="current_password" required />
+        </div>
 
-    <div>
-        <label for="new_password">New Password:</label>
-        <input type="password" id="new_password" name="new_password" required />
-    </div>
+        <div>
+            <label for="new_password">New Password:</label>
+            <input type="password" id="new_password" name="new_password" required />
+        </div>
 
-    <div>
-        <label for="confirm_password">Confirm New Password:</label>
-        <input type="password" id="confirm_password" name="confirm_password" required />
-    </div>
+        <div>
+            <label for="confirm_password">Confirm New Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required />
+        </div>
 
-    <div>
-        <button type="submit">Change Password</button>
-    </div>
+        <div>
+            <button type="submit">Change Password</button>
+        </div>
+    </form>
+
+    <form id="profile-button" action="{{ url_for('delete_user') }}" method="POST" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone!')">
+        <button type="submit">Delete Account</button>
     </form>
 </div>
 </body>
 </html>
+
 
 
 <script>
@@ -230,6 +249,8 @@ recognition.onresult = function(event) {
     window.location.href = '/purchased_items';
   } else if (transcript.includes('create listing')) {
     window.location.href = '/Create_listing';
+  } else if (transcript.includes('profile')) {
+    window.location.href = '/profile';
   }
   else {
     alert("Sorry, I didn't understand: " + transcript);

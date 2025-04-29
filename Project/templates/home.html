@@ -28,7 +28,7 @@
         </div>
         <div class="search-bar">
             <form action="{{ url_for('search') }}" method="GET">
-                <input type="text" name="query" placeholder="Search for items..." value="{{ query if query else '' }}" required>
+                <input type="text" name="query" placeholder="Search for items..." value="{{ query if query else '' }}">
                 <button type="submit">Search</button>
             </form>
         </div>
@@ -174,7 +174,73 @@
     </a>
 
 </div>
+<div class="faq-trigger" id="faq-trigger">
+    💬
+</div>
+<div class="chat-container" id="chat-container">
+    <div class="chat-box" id="chat-box">
+        <p><strong>FAQ Bot:</strong> Hello! I am your FAQ bot. Choose a question from the list below.</p>
+    </div>
+
+    <ul class="question-list" id="question-list">
+        <li onclick="askQuestion('How do I change my password?')">How do I change my password?</li>
+        <li onclick="askQuestion('How do I delete my account and data?')">How do I delete my account and data?</li>
+        <li onclick="askQuestion('How do I access my details?')">How do I access my details?</li>
+        <li onclick="askQuestion('How can I contact support?')">How can I contact support?</li>
+        <li onclick="askQuestion('How do I start a chat?')">How can I start a chat with a seller?</li>
+        <li onclick="askQuestion('How can I create a review?')">How can I create a review?</li>
+    </ul>
+
+    <button class="exit-button" id="exit-button" onclick="exitBot()">Exit</button>
+</div>
+
 <script>
+    async function askQuestion(questionText) {
+    const response = await fetch('/get_answer', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ question: questionText })
+    });
+
+    const data = await response.json();
+    const answer = data.answer;
+
+    const chatBox = document.getElementById('chat-box');
+    chatBox.innerHTML += `<p><strong>You:</strong> ${questionText}</p>`;
+    chatBox.innerHTML += `<p><strong>Bot:</strong> ${answer}</p>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function exitBot() {
+    const chatContainer = document.getElementById('chat-container');
+    if (chatContainer) {
+        chatContainer.classList.remove('show'); // Remove the 'show' class to hide the modal
+        const chatBox = document.getElementById('chat-box');
+        chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the last message
+    }
+}
+// Wait for the DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+    const chatContainer = document.getElementById('chat-container');
+    const faqTrigger = document.getElementById('faq-trigger');  // Existing FAQ trigger button
+    const exitButton = document.getElementById('exit-button');  // Exit button
+
+    // Show the chat modal when the FAQ button is clicked
+    faqTrigger.addEventListener('click', () => {
+        console.log('FAQ button clicked');
+        chatContainer.classList.add('show');  // Add 'show' class to display the modal
+    });
+
+    // Hide the chat modal when the exit button is clicked
+    exitButton.addEventListener('click', () => {
+        console.log('Exit button clicked');
+        chatContainer.classList.remove('show');  // Remove 'show' class to hide the modal
+    });
+});
+
+
     let isSpeaking = false
     var tablinks = document.getElementsByClassName("tab-links");
     var tabcontents = document.getElementsByClassName("tab-contents");
@@ -293,7 +359,10 @@ recognition.onresult = function(event) {
     window.location.href = '/purchased_items';
   } else if (transcript.includes('create listing')) {
     window.location.href = '/Create_listing';
+  } else if (transcript.includes('profile')) {
+    window.location.href = '/profile';
   }
+
   else {
     alert("Sorry, I didn't understand: " + transcript);
   }
@@ -302,6 +371,7 @@ recognition.onresult = function(event) {
 recognition.onerror = function(event) {
   console.error('🎤 Error:', event.error);
 };
+
 </script>
 
 </body>

@@ -186,6 +186,8 @@ recognition.onresult = function(event) {
     window.location.href = '/purchased_items';
   } else if (transcript.includes('create listing')) {
     window.location.href = '/Create_listing';
+  } else if (transcript.includes('profile')) {
+    window.location.href = '/profile';
   }
   else {
     alert("Sorry, I didn't understand: " + transcript);

@@ -27,7 +27,7 @@
         </div>
         <div class="search-bar">
             <form action="{{ url_for('search') }}" method="GET">
-                <input type="text" name="query" placeholder="Search for items..." value="{{ query if query else '' }}" required>
+                <input type="text" name="query" placeholder="Search for items..." value="{{ query if query else '' }}">
                 <button type="submit">Search</button>
             </form>
         </div>
@@ -77,6 +77,16 @@
     <button class="text-to-speech" onclick="speakText()">TTS</button>
     <button onclick="startListening()">🎙️ Voice Command</button>
 </div>
+<div class="seller-info">
+    <h2>Seller: {{ user.username }}</h2>
+    {% if user.profile_picture %}
+        <img src="data:image/{{ user.mime_type }};base64,{{ user.profile_picture | b64encode }}" alt="Seller Profile Picture" class="profile-picture1">
+    {% else %}
+    <div class="profile-container1">
+        <img src="{{ url_for('static', filename='images/Default_pfp.jpg') }}" alt="Seller Profile Picture" class="profile-picture1">
+    </div>
+    {% endif %}
+</div>
 
 <div class="inspect_item_column">
     <div class="inspect_Product">
@@ -87,19 +97,7 @@
             <p><strong>Price:</strong> ${{ item.price }}</p>
             <p><strong>Category:</strong> {{ item.category }}</p>
             <p><strong>Stock:</strong> {{ item.stock_quantity }}</p>
-
-            {% if session['user_id'] != item.user_id %}
-                <div class="inspect-actions">
-                    <a href="{{ url_for('chat', user_id=item.user_id, item_id=item.item_id) }}" class="message-button">💬 Message Seller</a>
-
-            <form action="{{ url_for('item_detail', item_id=item.item_id) }}" method="POST">
-                <div class="quantity-wrapper">
-                    <label for="quantity"><strong>Quantity:</strong></label>
-                    <input type="number" id="quantity" name="quantity" value="1" min="1" required>
-                </div>
-                <button type="submit" class="btn btn-success">Add to Basket</button>
-            </form>
-
+            <a href="{{ url_for('view_reviews', item_id=item.item_id) }}" class="btn btn-success">See Reviews</a>
             {% if session.get('is_admin') == 1 %}
                 {% if is_favorited %}
                     <form action="{{ url_for('item_detail', item_id=item.item_id) }}" method="POST">
@@ -112,7 +110,13 @@
                 {% endif %}
             {% endif %}
 
-                </div>
+            {% if session['user_id'] != item.user_id %}
+            <a href="{{ url_for('chat', user_id=item.user_id, item_id=item.item_id) }}" class="message-button">💬 Message Seller</a>
+            <form action="{{ url_for('item_detail', item_id=item.item_id) }}" method="POST">
+                    <label for="quantity"id="quantity1"><strong>Quantity:</strong></label>
+                    <input type="number" id="quantity" name="quantity" value="1" min="1" required>
+                <button type="submit" class="btn btn-success">Add to Basket</button>
+            </form>
             {% else %}
                 <p><em>You cannot add your own item to the basket.</em></p>
             {% endif %}
@@ -242,6 +246,8 @@ recognition.onresult = function(event) {
     window.location.href = '/purchased_items';
   } else if (transcript.includes('create listing')) {
     window.location.href = '/Create_listing';
+  } else if (transcript.includes('profile')) {
+    window.location.href = '/profile';
   }
   else {
     alert("Sorry, I didn't understand: " + transcript);

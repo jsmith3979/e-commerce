@@ -167,25 +167,27 @@
         const transcript = event.results[0][0].transcript.toLowerCase();
         console.log('🗣 You said:', transcript);
 
-        if (transcript.includes('home')) {
-            window.location.href = '/';
-        } else if (transcript.includes('my listings')) {
-            window.location.href = '/my_listings';
-        } else if (transcript.includes('basket')) {
-            window.location.href = '/basket';
-        } else if (transcript.includes('notifications')) {
-            window.location.href = '/notifications_page';
-        } else if (transcript.includes('messages')) {
-            window.location.href = '/chat_inbox';
-        } else if (transcript.includes('log out')) {
-            window.location.href = '/logout';
-        } else if (transcript.includes('my reviews')) {
-            window.location.href = '/reviews';
-        } else if (transcript.includes('purchases')) {
-            window.location.href = '/purchased_items';
-        } else if (transcript.includes('create listing')) {
-            window.location.href = '/Create_listing';
-        }
+  if (transcript.includes('home')) {
+    window.location.href = '/';
+  } else if (transcript.includes('my listings')) {
+    window.location.href = '/my_listings';
+  } else if (transcript.includes('basket')) {
+    window.location.href = '/basket';
+  } else if (transcript.includes('notifications')) {
+    window.location.href = '/notifications_page';
+  } else if (transcript.includes('messages')) {
+    window.location.href = '/chat_inbox';
+  } else if (transcript.includes('log out')) {
+    window.location.href = '/logout';
+  } else if (transcript.includes('my reviews')) {
+    window.location.href = '/reviews';
+  } else if (transcript.includes('purchases')) {
+    window.location.href = '/purchased_items';
+  } else if (transcript.includes('create listing')) {
+    window.location.href = '/Create_listing';
+  } else if (transcript.includes('profile')) {
+    window.location.href = '/profile';
+  }
         else {
             alert("Sorry, I didn't understand: " + transcript);
         }

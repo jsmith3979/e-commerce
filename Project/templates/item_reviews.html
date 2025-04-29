@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Messages</title>
+    <title>Home Page</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
@@ -63,27 +64,98 @@
         <div class="logo"><h2>E</h2><h1>BUY</h1></div>
     </div>
 </div>
+
 <div class="tts">
     <button class="text-to-speech" onclick="speakText()">TTS</button>
     <button onclick="startListening()">🎙️ Voice Command</button>
 </div>
-<div class="chat-inbox">
-    <h3>Your Messages</h3>
-{% if conversations %}
-    <ul>
-        {% for conversation in conversations %}
-            <li>
-                <a href="{{ url_for('chat', user_id=conversation.other_user_id, item_id=conversation.item_id) }}">
-                    Chat with {{ conversation.username }} about "{{ conversation.item_name }}"
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No conversations available.</p>
-{% endif %}
+
+<!-- item_reviews.html -->
+<h1>Reviews for {{ item.name }}</h1>
+
+{% if reviews %}
+<div class="container">
+    {% if reviews %}
+        <div class="product-list1">
+            {% for review in reviews %}
+                <div class="product-card1">
+                    <h3>{{ review.item_name }}</h3>
+                    <div class="review-header">
+                        <strong>{{ review.username }}</strong> - {{ review.review_date.strftime('%Y-%m-%d') }}
+                    </div>
+                    <div class="review-rating">
+                        Rating: {{ review.rating }} / 5
+                    </div>
+                    <div class="review-comment">
+                        Comment: {{ review.comment }}
+                    </div>
+                    <a href="{{ url_for('view_review', review_id=review.review_id) }}">
+                        <button class="btn btn-success">View Full Review</button>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>You haven't left any reviews yet.</p>
+    {% endif %}
 </div>
+
+{% else %}
+    <p>No reviews yet. Be the first to leave a review!</p>
+{% endif %}
+
+
+<a href="{{ url_for('item_detail', item_id=item.item_id) }}" class="btn btn-success">Back to Item</a>
+
+
+
 <script>
+    async function askQuestion(questionText) {
+    const response = await fetch('/get_answer', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ question: questionText })
+    });
+
+    const data = await response.json();
+    const answer = data.answer;
+
+    const chatBox = document.getElementById('chat-box');
+    chatBox.innerHTML += `<p><strong>You:</strong> ${questionText}</p>`;
+    chatBox.innerHTML += `<p><strong>Bot:</strong> ${answer}</p>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function exitBot() {
+    const chatContainer = document.getElementById('chat-container');
+    if (chatContainer) {
+        chatContainer.classList.remove('show'); // Remove the 'show' class to hide the modal
+        const chatBox = document.getElementById('chat-box');
+        chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the last message
+    }
+}
+// Wait for the DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+    const chatContainer = document.getElementById('chat-container');
+    const faqTrigger = document.getElementById('faq-trigger');  // Existing FAQ trigger button
+    const exitButton = document.getElementById('exit-button');  // Exit button
+
+    // Show the chat modal when the FAQ button is clicked
+    faqTrigger.addEventListener('click', () => {
+        console.log('FAQ button clicked');
+        chatContainer.classList.add('show');  // Add 'show' class to display the modal
+    });
+
+    // Hide the chat modal when the exit button is clicked
+    exitButton.addEventListener('click', () => {
+        console.log('Exit button clicked');
+        chatContainer.classList.remove('show');  // Remove 'show' class to hide the modal
+    });
+});
+
+
     let isSpeaking = false
     var tablinks = document.getElementsByClassName("tab-links");
     var tabcontents = document.getElementsByClassName("tab-contents");
@@ -205,6 +277,7 @@ recognition.onresult = function(event) {
   } else if (transcript.includes('profile')) {
     window.location.href = '/profile';
   }
+
   else {
     alert("Sorry, I didn't understand: " + transcript);
   }
@@ -213,6 +286,9 @@ recognition.onresult = function(event) {
 recognition.onerror = function(event) {
   console.error('🎤 Error:', event.error);
 };
+
 </script>
+
 </body>
 </html>
+

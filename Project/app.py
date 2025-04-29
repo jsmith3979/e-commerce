@@ -4,11 +4,13 @@ from mysql.connector import Error
 import bcrypt
 from flask import send_file
 import io
+import base64
 
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
+# allows for the connection to the mysql db
 def connect_to_mysql():
     try:
         connection = mysql.connector.connect(
@@ -22,11 +24,11 @@ def connect_to_mysql():
         print(f"Error: {e}")
         return None
 
-
+# the home page for users who are not logged in
 @app.route('/')
 def Unlogged_home():
     # Fetch the items from the database
-    category = request.args.get('category', '')  # Get selected category
+    category = request.args.get('category', '')
     price_min = request.args.get('price_min', '')
     price_max = request.args.get('price_max', '')
 
@@ -35,7 +37,7 @@ def Unlogged_home():
         try:
             cursor = connection.cursor(dictionary=True)
 
-            # Base query
+            # query to get all the items and usernames
             query = """
                  SELECT items.*, users.username 
                  FROM items 
@@ -79,18 +81,18 @@ def Unlogged_home():
 
 
 
-
+# render login page
 @app.route('/login')
 def loginhtml():
     return render_template('login.html')
 
-
+# the login functionality
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    # Redirect logged-in users to the logged-in homepage
+    # Redirect logged-in users to the logged-in homepage if the user has a session already
     if 'user_id' in session:
-        return redirect(url_for('logged_home'))  # Prevent logged-in users from accessing the login page again
-
+        return redirect(url_for('logged_home'))
+    # collect the email and password that the user inputs
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -101,45 +103,44 @@ def login():
             try:
                 cursor = connection.cursor(dictionary=True)
 
-                # Check if user exists
+                # Check if user exists against the users input
                 query = "SELECT * FROM users WHERE email = %s"
                 cursor.execute(query, (email,))
                 user = cursor.fetchone()
 
-                # Check if user exists, the password is correct, and if they are banned
+                # Check if user exists, and if the password is correct, and if they are banned
                 if user:
                     if user['is_banned']:
                         flash("Your account has been banned. Please contact support.", 'danger')
-                        return redirect(url_for('login'))  # Redirect back to the login page
-
+                        return redirect(url_for('login'))
+                    # encode the password using bcrypt
                     if bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
                         # Successful login, store user info in session
                         session['user_id'] = user['user_id']
                         session['username'] = user['username']
-                        session['is_admin'] = user['is_admin']  # Store admin status
+                        session['is_admin'] = user['is_admin']
 
-                        # Check if there's a 'next' URL parameter
+                        # Check if there's a next url parameter
                         next_url = request.args.get('next')
                         if next_url:
-                            return redirect(next_url)  # Redirect to the originally requested page
+                            return redirect(next_url)
                         else:
-                            return redirect(url_for('logged_home'))  # Redirect to the homepage/dashboard
+                            return redirect(url_for('logged_home'))
                     else:
                         flash("Incorrect email or password. Please try again.", 'danger')
-                        return redirect(url_for('login'))  # Return the user to the login page with a flash message
+                        return redirect(url_for('login'))
 
                 else:
                     flash("Incorrect email or password. Please try again.", 'danger')
-                    return redirect(url_for('login'))  # Return the user to the login page with a flash message
+                    return redirect(url_for('login'))
 
             except Error as e:
-                flash(f"Database Error: {e}", 'danger')  # Flash any database-related errors
+                flash(f"Database Error: {e}", 'danger')
                 return redirect(url_for('login'))
             finally:
                 cursor.close()
                 connection.close()
 
-        # If database connection failed
         flash("Failed to connect to the database. Please try again later.", 'danger')
         return redirect(url_for('login'))
 
@@ -147,20 +148,22 @@ def login():
 
 
 
-
+# main home page for logged in users
 @app.route('/dashboard')
 def logged_home():
+    # get the users name from the session
     username = session.get('username')
     if 'user_id' not in session:
         return redirect(url_for('login'))
-
-    if session.get('is_admin') == 1:  # Assuming 'is_admin' is stored in the session
+    # if the user is admin direct them to admin_dashboard instead
+    if session.get('is_admin') == 1:
         return redirect(url_for('admin_dashboard'))
 
     connection = connect_to_mysql()
     if connection:
         try:
             cursor = connection.cursor(dictionary=True)
+            # collect all items and their username attached from items
             query = """
                   SELECT items.*, users.username 
                   FROM items 
@@ -184,15 +187,16 @@ def logged_home():
     return render_template('unlogged_home.html', username=session.get('username'))
 
 
-
+# clears the users session and redirects them out
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('Unlogged_home'))
-
+# renders the register page
 @app.route('/register', methods=['GET'])
 def show_form():
     return render_template('register.html')
+# register functionality
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -200,17 +204,15 @@ def register():
         email = request.form['email']
         password = request.form['password']
 
-        # Check if email or username already exists in the database
+
         connection = connect_to_mysql()
         if connection is not None:
             try:
                 cursor = connection.cursor(dictionary=True)
-
-                # Check if the email already exists
                 query_email = "SELECT * FROM users WHERE email = %s"
                 cursor.execute(query_email, (email,))
                 existing_user = cursor.fetchone()
-
+                # Check if email or username already exists in the database
                 if existing_user:
                     flash("The email is already in use. Please choose a different email.", 'danger')
                     return redirect(url_for('register'))
@@ -246,10 +248,10 @@ def register():
         flash("Failed to connect to the database.", 'danger')
         return redirect(url_for('register'))
 
-    return render_template('register.html')  # Make sure you have the register.html form
+    return render_template('register.html')
 
 
-
+# allows users to create a listing
 @app.route('/Create_listing', methods=['GET', 'POST'])
 def create_listing():
     if 'user_id' not in session:
@@ -259,9 +261,9 @@ def create_listing():
 
         # Check if user is logged in
         if 'user_id' not in session:
-            return redirect(url_for('login'))  # Redirect to login if not logged in
+            return redirect(url_for('login'))
 
-        # Get form data
+        # Get form data inputted from the user
         item_name = request.form['item_name']
         item_description = request.form['item_description']
         item_price = request.form['item_price']
@@ -272,12 +274,13 @@ def create_listing():
         image_file = request.files.get('image')
         image_data = None
         if image_file:
-            image_data = image_file.read()  # <-- Error might happen here
+            image_data = image_file.read()
 
 
         # Get the current logged-in user's ID from session
         user_id = session['user_id']
-
+        # stops users from entering less that 0 for a listing
+        # however a min amount got placed on form itself
         try:
             item_stock_quantity = int(item_stock_quantity)
             if item_stock_quantity < 0:
@@ -324,7 +327,7 @@ def create_listing():
 
 
 
-
+# displays the items image
 @app.route('/item_image/<int:item_id>')
 def item_image(item_id):
     connection = connect_to_mysql()
@@ -346,12 +349,14 @@ def item_image(item_id):
             cursor.close()
             connection.close()
     return "Failed to connect to the database.", 500
+
+# item detail page shows the details of the item as well as allowing the user to add to basket and message the user
 @app.route('/item/<int:item_id>', methods=['GET', 'POST'])
 def item_detail(item_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
-    connection = connect_to_mysql()  # Establish database connection
+    connection = connect_to_mysql()
     if connection:
         try:
             cursor = connection.cursor(dictionary=True)
@@ -361,12 +366,24 @@ def item_detail(item_id):
             cursor.execute(query, (item_id,))
             item = cursor.fetchone()
 
-            if request.method == 'POST':  # If form is submitted (Add to Basket or Favorite)
+            # Fetch existing reviews for the item
+            review_query = """
+            SELECT r.review_id, r.rating, r.comment, r.review_date, u.username
+            FROM review r
+            JOIN users u ON r.user_id = u.user_id
+            WHERE r.item_id = %s
+            ORDER BY r.review_date DESC
+            """
+            cursor.execute(review_query, (item_id,))
+            reviews = cursor.fetchall()
+
+            # If form is submitted, handle add to basket or favorite actions
+            if request.method == 'POST':
                 if 'user_id' not in session:
                     return redirect(url_for('login'))
 
+                # Favorite status is only given by admins
                 if 'favorite' in request.form:
-                    # Toggle favorite status
                     favorite_action = request.form['favorite']
                     if favorite_action == 'favorite':
                         cursor.execute("INSERT INTO adminfavorites (user_id, item_id) VALUES (%s, %s)",
@@ -377,14 +394,13 @@ def item_detail(item_id):
                                        (session['user_id'], item_id))
                         connection.commit()
 
-
-
                 elif 'quantity' in request.form:
                     quantity = int(request.form.get('quantity', 1))
                     # Check if enough stock exists
                     if quantity > item['stock_quantity']:
                         flash(f"Only {item['stock_quantity']} in stock. Cannot add {quantity}.", 'danger')
                         return redirect(url_for('item_detail', item_id=item_id))
+
                     # Check if the item already exists in the basket
                     basket_query = """
                     SELECT quantity FROM basket WHERE user_id = %s AND item_id = %s
@@ -412,21 +428,40 @@ def item_detail(item_id):
                         cursor.execute(insert_query, (session['user_id'], item_id, quantity))
                     connection.commit()
                     return redirect(url_for('basket_page'))
+
             # Check if the item is already favorited by the user
             cursor.execute("SELECT 1 FROM adminfavorites WHERE user_id = %s AND item_id = %s",
                            (session['user_id'], item_id))
             is_favorited = cursor.fetchone() is not None  # Boolean check
+
+            # Fetch the user details (including profile picture) of the item seller
+            cursor.execute("SELECT user_id, username, email, profile_picture FROM users WHERE user_id = %s",
+                           (item['user_id'],))
+            user = cursor.fetchone()
+
+            if user and user['profile_picture']:
+                # Detect image type (JPEG or PNG) based on the byte signature
+                if user['profile_picture'].startswith(b'\xff\xd8\xff'):
+                    user['mime_type'] = 'jpeg'
+                else:
+                    user['mime_type'] = 'png'
+
             if item:
-                return render_template('item_detail.html', item=item, is_favorited=is_favorited)
+                # Pass the reviews along with item details and other variables to the template
+                return render_template('item_detail.html', item=item, is_favorited=is_favorited, user=user, reviews=reviews)
             else:
                 return redirect(url_for('logged_home'))
+
         except Error as e:
+            flash(f"Database Error: {e}", 'danger')
             return redirect(url_for('logged_home'))
         finally:
             cursor.close()
             connection.close()
     return redirect(url_for('logged_home'))
 
+
+# search page and filtering of items
 @app.route('/search')
 def search():
     query = request.args.get('query', '')
@@ -446,89 +481,91 @@ def search():
     try:
         cursor = connection.cursor(dictionary=True)
 
-        # Common filter handling
-        where_clauses = ["1=1"]
+        # filter handling
+        # Ensure only active items are selected by default
+        where_clauses = ["items.is_active = TRUE"]
         params = []
 
+        # Search term, if a user inputs letters that are similar to the names of items it will show
         if query:
             where_clauses.append("(items.name LIKE %s OR items.description LIKE %s)")
             params.extend([f"%{query}%", f"%{query}%"])
 
+        # Filters categories
         if category:
             where_clauses.append("items.category = %s")
             params.append(category)
-
+        # Filters price minimum
         if price_min:
             where_clauses.append("items.price >= %s")
             params.append(price_min)
-
+        # Filters price max
         if price_max:
             where_clauses.append("items.price <= %s")
             params.append(price_max)
-
+        # Filters admin favorites otherwise known as recommendations
         if admin_favorites:
             where_clauses.append("""
                 items.item_id IN (
-                    SELECT item_id FROM adminfavorites 
+                    SELECT item_id FROM adminfavorites
                     WHERE user_id IN (
                         SELECT user_id FROM users WHERE is_admin = 1
                     )
                 )
             """)
 
+        # Build WHERE clause, this joins the search bar with the filter
+        where_sql = " AND ".join(where_clauses)
+
+        # Handle special panels
+        # handles most sold in the website by summing up the purchased amount from the purchases table
+        # they are also ordered most sold to least sold
         if most_sold:
             sql = f"""
                 SELECT items.*, users.username, COALESCE(SUM(purchases.quantity), 0) AS total_sold
                 FROM items
                 LEFT JOIN purchases ON items.item_id = purchases.item_id
                 JOIN users ON items.user_id = users.user_id
-                WHERE {" AND ".join(where_clauses)}
+                WHERE {where_sql}
                 GROUP BY items.item_id
                 ORDER BY total_sold DESC
             """
-            cursor.execute(sql, params)
-            items = cursor.fetchall()
-
+        # this handles the new deals on the site within a 7 day interval and they are ordered from latest to oldest
         elif new_deals:
-            where_clauses.append("items.created_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)")
+            where_sql += " AND items.created_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)"
             sql = f"""
                 SELECT items.*, users.username
                 FROM items
                 JOIN users ON items.user_id = users.user_id
-                WHERE {" AND ".join(where_clauses)}
+                WHERE {where_sql}
                 ORDER BY items.created_at DESC
             """
-            cursor.execute(sql, params)
-            items = cursor.fetchall()
-
+        # shows all recommended/favorited items from the admin
         elif recommended == 'ebuy':
-            # You can replace 'Electronics' with smarter logic later
-            where_clauses.append("items.category = 'Electronics'")
+            where_sql += " AND items.category = 'Electronics'"
             sql = f"""
                 SELECT items.*, users.username
                 FROM items
                 JOIN users ON items.user_id = users.user_id
-                WHERE {" AND ".join(where_clauses)}
+                WHERE {where_sql}
                 ORDER BY items.created_at DESC
             """
-            cursor.execute(sql, params)
-            items = cursor.fetchall()
-
         else:
             sql = f"""
                 SELECT items.*, users.username
                 FROM items
                 JOIN users ON items.user_id = users.user_id
-                WHERE {" AND ".join(where_clauses)}
+                WHERE {where_sql}
                 ORDER BY items.created_at DESC
             """
-            cursor.execute(sql, params)
-            items = cursor.fetchall()
 
-        # Get categories
+        cursor.execute(sql, params)
+        items = cursor.fetchall()
+
         cursor.execute("SELECT DISTINCT category FROM items")
-        categories = [row['category'] for row in cursor.fetchall()]
-
+        categories_data = cursor.fetchall()
+        categories = [row['category'] for row in categories_data]
+        # render the template with these variables
         return render_template(
             'search.html',
             items=items,
@@ -550,7 +587,7 @@ def search():
 
 
 
-
+# sending a message to a user
 @app.route('/send_message', methods=['POST'])
 def send_message():
     sender_id = session['user_id']
@@ -563,6 +600,7 @@ def send_message():
     if connection:
         try:
             cursor = connection.cursor()
+            # when the user clicks submit on the form the variables above are passed and inserted into the db
             query = """
                 INSERT INTO messages (sender_id, receiver_id, item_id, message_text, created_at)
                 VALUES (%s, %s, %s, %s, NOW())
@@ -571,6 +609,7 @@ def send_message():
 
             cursor.execute("SELECT username FROM users WHERE user_id = %s", (sender_id,))
             sender = cursor.fetchone()
+            # gets the senders name otherwise default to someone
             sender_username = sender[0] if sender else "Someone"
 
             # Get item name
@@ -599,7 +638,7 @@ def send_message():
     return redirect(url_for('unlogged_home'))
 
 
-
+# chatroom
 @app.route('/chat/<int:user_id>/<int:item_id>', methods=['GET'])
 def chat(user_id, item_id):
     if 'user_id' not in session:
@@ -613,7 +652,7 @@ def chat(user_id, item_id):
         try:
             cursor = connection.cursor()
 
-            # Get messages between the two users
+            # Get messages between the two users with the timestamps
             message_query = """
                 SELECT m.sender_id, u.username, m.message_text, m.created_at
                 FROM messages m
@@ -635,7 +674,7 @@ def chat(user_id, item_id):
             item_query = "SELECT * FROM items WHERE item_id = %s"
             cursor.execute(item_query, (item_id,))
             item = cursor.fetchone()
-
+            # the name of the chat partner will be in the first column in the db
             if chat_partner:
                 chat_partner_name = chat_partner[0]
             else:
@@ -653,7 +692,7 @@ def chat(user_id, item_id):
 
     return redirect(url_for('chat_inbox'))
 
-
+# shows the chat inbox of the user
 @app.route('/chat_inbox', methods=['GET'])
 def chat_inbox():
     if 'user_id' not in session:
@@ -665,7 +704,8 @@ def chat_inbox():
     if connection:
         try:
             cursor = connection.cursor(dictionary=True)
-
+            # this essentially gives me all the people ive messaged, and for each one, tell me what item we
+            # talked about and show the latest conversation first.
             query = """
                 SELECT 
                     CASE 
@@ -696,7 +736,7 @@ def chat_inbox():
 
             if not conversations:
                 # Flash message and render the page with no conversations
-                flash("No conversations available.", 'info')
+
                 return render_template('chat_inbox.html', conversations=None)
 
             return render_template('chat_inbox.html', conversations=conversations)
@@ -712,6 +752,7 @@ def chat_inbox():
     flash("Failed to connect to the database.", 'danger')
     return redirect(url_for('logged_home'))
 
+# notification page
 @app.route('/notifications_page')
 def notifications_page():
     if 'user_id' not in session:
@@ -724,7 +765,7 @@ def notifications_page():
     if connection:
         try:
             cursor = connection.cursor(dictionary=True)
-            # Fetch all notifications for the user, ordered by creation date (newest first)
+            # Fetch all notifications for the user, ordered by creation date newest first and whether they have been read or not
             query = """
                 SELECT notification_id, message, is_read, created_at 
                 FROM notifications 
@@ -734,7 +775,7 @@ def notifications_page():
             cursor.execute(query, (user_id,))
             notifications = cursor.fetchall()
 
-            # Optional: Mark all notifications as read
+            # updates the notifcations when they have been read
             update_query = "UPDATE notifications SET is_read = 1 WHERE user_id = %s"
             cursor.execute(update_query, (user_id,))
             connection.commit()
@@ -752,7 +793,7 @@ def notifications_page():
 
 
 
-
+# individual notifications
 @app.route('/notifications', methods=['GET'])
 def notifications():
     # Check that the user is logged in
@@ -764,7 +805,7 @@ def notifications():
     if connection:
         try:
             cursor = connection.cursor(dictionary=True)
-            # This query counts unread notifications for the current user
+            # This query counts unread notifications for the current user, these will get displayed in the home page and other pages
             query = """
                 SELECT COUNT(*) AS unread_count 
                 FROM notifications 
@@ -786,7 +827,7 @@ def notifications():
 @app.route('/delete_notification/<int:notification_id>', methods=['POST'])
 def delete_notification(notification_id):
     if 'user_id' not in session:
-        flash("Please log in to delete notifications.", "warning")
+
         return redirect(url_for('login'))
 
     connection = connect_to_mysql()
@@ -794,12 +835,12 @@ def delete_notification(notification_id):
         try:
             cursor = connection.cursor()
 
-            # Make sure the notification belongs to the logged-in user
+            # delete the notifications from the correct user
             query = "DELETE FROM notifications WHERE notification_id = %s AND user_id = %s"
             cursor.execute(query, (notification_id, session['user_id']))
             connection.commit()
 
-            flash("Notification deleted.", "success")
+
         except Error as e:
             flash(f"Database Error: {e}", "danger")
         finally:
@@ -808,6 +849,7 @@ def delete_notification(notification_id):
 
     return redirect(url_for('notifications_page'))
 
+# basket page
 @app.route('/basket')
 def basket_page():
     if 'user_id' not in session:
@@ -819,7 +861,7 @@ def basket_page():
         try:
             cursor = connection.cursor(dictionary=True)
 
-            # Query to fetch basket items for the logged-in user, including item details
+            # Query to fetch basket items for the logged in user including item details, image and price
             query = """
             SELECT 
                 basket.item_id, 
@@ -836,13 +878,6 @@ def basket_page():
             cursor.execute(query, (session['user_id'],))
             basket_items = cursor.fetchall()
 
-            # If the basket is empty, show a relevant message
-            if not basket_items:
-                flash("Your basket is empty.", "info")
-
-            # Debugging: Check the basket items before rendering the template
-            # print(basket_items)  # Optionally, log the result to check
-
             return render_template('basket.html', basket_items=basket_items, )
 
         except Error as e:
@@ -855,11 +890,13 @@ def basket_page():
     flash("Failed to connect to the database.", "danger")
     return redirect(url_for('home'))
 
+# gets the items in the basket table in the db
 def get_basket_items(user_id):
     connection = connect_to_mysql()
     if connection:
         try:
             cursor = connection.cursor(dictionary=True)
+            # gets item id, name, price and quantity
             query = """
                 SELECT i.item_id, i.name, i.price, b.quantity
                 FROM basket b
@@ -878,9 +915,11 @@ def get_basket_items(user_id):
 
     return []
 
+# updates the basket table in the db
 @app.route('/update_basket', methods=['POST'])
 def update_basket():
     user_id = session['user_id']
+    # replaces the quantity amount in the basket with the users input
     for item in get_basket_items(user_id):
         quantity_field = f'quantity_{item["item_id"]}'
         if quantity_field in request.form:
@@ -889,7 +928,7 @@ def update_basket():
     return redirect('/basket')
 
 
-
+# this is the function that is used to update the quantity
 def update_item_quantity(item_id, new_quantity):
     connection = connect_to_mysql()
     if connection:
@@ -908,7 +947,7 @@ def update_item_quantity(item_id, new_quantity):
             cursor.close()
             connection.close()
 
-
+#  delete from basket
 @app.route('/delete_from_basket', methods=['POST'])
 def delete_from_basket():
 
@@ -917,23 +956,23 @@ def delete_from_basket():
         return redirect(url_for('login'))
 
     item_id = request.form.get('item_id')
-
+    # removes the item from the basket if an item_id exists
     if item_id:
-        remove_item_from_basket(item_id)  # Your DB logic here
-        flash("Item removed from basket.", "success")
+        remove_item_from_basket(item_id)
+
     else:
         flash("Failed to remove item. Item ID not provided.", "danger")
 
     # Redirect to the updated basket page
     return redirect(url_for('basket_page'))
 
+# function to remove the item
 def remove_item_from_basket(item_id):
     connection = connect_to_mysql()
     if connection:
         try:
             cursor = connection.cursor()
 
-            # Print the current contents of the basket before attempting removal
             check_basket_query = """
                 SELECT * FROM basket WHERE user_id = %s AND item_id = %s
             """
@@ -955,6 +994,7 @@ def remove_item_from_basket(item_id):
             cursor.close()
             connection.close()
 
+# purchase logic
 @app.route('/purchase', methods=['POST'])
 def purchase():
     if 'user_id' not in session:
@@ -965,7 +1005,7 @@ def purchase():
 
     # Fetch the items in the basket
     basket_items = get_basket_items(user_id)
-
+    # if no items in basket display empty message
     if not basket_items:
         flash('Your basket is empty. Please add items before proceeding.', 'warning')
         return redirect(url_for('basket_page'))
@@ -1013,7 +1053,7 @@ def purchase():
             # Commit the changes to the database
             connection.commit()
 
-            # Clear the user's basket (delete items from the basket)
+            # Clear the user's basket, delete items from the basket
             clear_basket_query = """
                 DELETE FROM basket WHERE user_id = %s
             """
@@ -1021,7 +1061,7 @@ def purchase():
 
             connection.commit()
 
-            flash('Purchase successful! Check your notifications.', 'success')
+
             return redirect(url_for('logged_home'))
 
         except Error as e:
@@ -1036,7 +1076,7 @@ def purchase():
     flash('Failed to connect to the database.', 'danger')
     return redirect(url_for('basket_page'))
 
-
+# favorite item for admins to reccommend items
 @app.route('/favorite_item/<int:item_id>', methods=['POST'])
 def favorite_item(item_id):
     # Check if the user is logged in and is an admin
@@ -1044,9 +1084,7 @@ def favorite_item(item_id):
         flash('You must be an admin to favorite items.', 'warning')
         return redirect(url_for('logged_home'))
 
-    user_id = session['user_id']  # Get the logged-in user ID (admin)
-
-    # Connect to the database
+    user_id = session['user_id']
     connection = connect_to_mysql()
 
     if connection:
@@ -1074,7 +1112,7 @@ def favorite_item(item_id):
                 """, (user_id, item_id))
 
                 connection.commit()
-                flash('Item has been removed from your favorites.', 'success')
+
             else:
                 # Favorite the item
                 cursor.execute("""
@@ -1083,7 +1121,7 @@ def favorite_item(item_id):
                 """, (user_id, item_id))
 
                 connection.commit()
-                flash('Item added to favorites successfully!', 'success')
+
 
             return redirect(url_for('item_detail', item_id=item_id))
 
@@ -1098,8 +1136,10 @@ def favorite_item(item_id):
     flash("Failed to connect to the database.", 'danger')
     return redirect(url_for('item_detail', item_id=item_id))
 
+# route to the admin dashboard
 @app.route('/admin_dashboard')
 def admin_dashboard():
+    # check if the user is an admin
     if not session.get('is_admin'):
         flash("Access denied.", "danger")
         return redirect(url_for('login'))
@@ -1109,7 +1149,7 @@ def admin_dashboard():
         try:
             cursor = connection.cursor(dictionary=True)
 
-            # Get admin's favorited items
+            # get the admin's favorited items
             cursor.execute("""
                 SELECT i.* FROM adminfavorites af
                 JOIN items i ON af.item_id = i.item_id
@@ -1128,7 +1168,7 @@ def admin_dashboard():
     flash("Failed to connect to database.", "danger")
     return redirect(url_for('login'))
 
-
+# shows the users current listings page
 @app.route('/my_listings')
 def my_listings():
     if 'user_id' not in session:
@@ -1140,7 +1180,7 @@ def my_listings():
         try:
             cursor = connection.cursor(dictionary=True)
 
-            # Fetch only active items (is_active = TRUE)
+            # Fetch items listed by the user
             cursor.execute("SELECT * FROM items WHERE user_id = %s", (session['user_id'],))
             items = cursor.fetchall()
 
@@ -1157,7 +1197,7 @@ def my_listings():
         return redirect(url_for('logged_home'))
 
 
-
+# allows user to update their listings
 @app.route('/update_item/<int:item_id>', methods=['POST'])
 def update_item(item_id):
     if 'user_id' not in session:
@@ -1168,6 +1208,7 @@ def update_item(item_id):
     price = request.form.get('price')
     category = request.form.get('category')
     stock_quantity = request.form.get('stock_quantity')
+    new_photo = request.files.get('new_photo')  # <<< Get the uploaded file
 
     if not name or not price or not category or not stock_quantity.isdigit():
         flash("Invalid input.", 'danger')
@@ -1181,13 +1222,24 @@ def update_item(item_id):
             item = cursor.fetchone()
 
             if item and item[0] == session['user_id']:
-                cursor.execute("""
-                    UPDATE items
-                    SET name = %s, price = %s, category = %s, stock_quantity = %s
-                    WHERE item_id = %s
-                """, (name, float(price), category, int(stock_quantity), item_id))
+                # If a new photo was uploaded
+                if new_photo and new_photo.filename != '':
+                    photo_data = new_photo.read()
+
+                    cursor.execute("""
+                        UPDATE items
+                        SET name = %s, price = %s, category = %s, stock_quantity = %s, image = %s
+                        WHERE item_id = %s
+                    """, (name, float(price), category, int(stock_quantity), photo_data, item_id))
+                else:
+                    # No new photo, just update other fields
+                    cursor.execute("""
+                        UPDATE items
+                        SET name = %s, price = %s, category = %s, stock_quantity = %s
+                        WHERE item_id = %s
+                    """, (name, float(price), category, int(stock_quantity), item_id))
+
                 connection.commit()
-                flash("Item updated successfully!", 'success')
             else:
                 flash("Unauthorized or item not found.", 'danger')
         except Error as e:
@@ -1200,6 +1252,7 @@ def update_item(item_id):
 
 
 
+# edit listing
 @app.route('/edit_my_listings/<int:item_id>', methods=['GET', 'POST'])
 def edit_listing(item_id):
     if 'user_id' not in session:
@@ -1212,23 +1265,23 @@ def edit_listing(item_id):
             cursor = connection.cursor()
             cursor.execute("SELECT * FROM items WHERE item_id = %s", (item_id,))
             item = cursor.fetchone()
-
+            # if not item is found error
             if not item:
                 flash("Item not found.", 'danger')
                 return redirect(url_for('my_listings'))
-
+            # if the item found is not created by the current user error
             if item[1] != session['user_id']:  # Ensure the item belongs to the logged-in user
                 flash("You cannot edit an item that does not belong to you.", 'danger')
                 return redirect(url_for('my_listings'))
 
             if request.method == 'POST':
-                # Handle the form submission
+                # inputted variables from the form
                 new_name = request.form['name']
                 new_price = request.form['price']
                 new_category = request.form['category']
                 new_stock_quantity = request.form['stock_quantity']
 
-                # Update the item in the database
+                # Update the item in the database based on the variables
                 cursor.execute("""
                     UPDATE items
                     SET name = %s, price = %s, category = %s, stock_quantity = %s
@@ -1236,16 +1289,16 @@ def edit_listing(item_id):
                 """, (new_name, new_price, new_category, new_stock_quantity, item_id))
                 connection.commit()
 
-                flash("Item updated successfully!", 'success')
+
                 return redirect(url_for('my_listings'))
 
             # Map item data to variables for GET request
             item_data = {
                 'item_id': item[0],
                 'name': item[2],
-                'price': item[3],
-                'category': item[4],
-                'stock_quantity': item[5],
+                'price': item[4],
+                'category': item[5],
+                'stock_quantity': item[8],
             }
 
             return render_template('edit_my_listings.html', item=item_data)
@@ -1258,6 +1311,7 @@ def edit_listing(item_id):
 
     return redirect(url_for('my_listings'))
 
+# displays the users purchases that they have made
 @app.route('/purchased_items')
 def my_purchases():
     if 'user_id' not in session:
@@ -1269,7 +1323,6 @@ def my_purchases():
     if connection:
         try:
             cursor = connection.cursor(dictionary=True)
-
             cursor.execute("""
                 SELECT p.purchase_id, p.item_id, i.name AS item_name, p.quantity, p.total_price, p.purchase_date
                 FROM purchases p
@@ -1290,16 +1343,14 @@ def my_purchases():
             connection.close()
 
     return "Database connection failed"
-
+# allows for an item to be reviewed
 @app.route('/review_item/<int:item_id>', methods=['GET', 'POST'])
 def review_item(item_id):
     if 'user_id' not in session:
         flash('Please log in first', 'warning')
         return redirect(url_for('login'))
-    # Get the current user_id
     user_id = session.get('user_id')
 
-    # Connect to the database
     connection = connect_to_mysql()
     cursor = connection.cursor(dictionary=True)
 
@@ -1310,7 +1361,6 @@ def review_item(item_id):
     if not item:
         return "Item not found", 404
 
-    # Handle the form submission to submit the review
     if request.method == 'POST':
         rating = request.form['rating']
         comment = request.form['comment']
@@ -1337,18 +1387,18 @@ def show_reviews():
         flash('Please log in first', 'warning')
         return redirect(url_for('login'))
 
-    user_id = session['user_id']  # Get the current user's ID from the session
+    user_id = session['user_id']
 
     connection = connect_to_mysql()
     cursor = connection.cursor(dictionary=True)
-
+    #  fetch all reviews made by a specific user, along with details about the reviewed items
     cursor.execute("""
         SELECT r.review_id, r.user_id, r.item_id, i.name AS item_name, r.rating, r.comment, r.review_date
         FROM review r
         JOIN items i ON r.item_id = i.item_id
-        WHERE r.user_id = %s  -- Filter reviews by the current user's ID
+        WHERE r.user_id = %s  
         ORDER BY r.review_date DESC
-    """, (user_id,))  # Pass the user_id as a parameter to prevent SQL injection
+    """, (user_id,))
     reviews = cursor.fetchall()
 
     cursor.close()
@@ -1356,6 +1406,7 @@ def show_reviews():
 
     return render_template('reviews.html', reviews=reviews)
 
+# allows users to edit their reviews
 @app.route('/edit_review/<int:review_id>', methods=['GET', 'POST'])
 def edit_review(review_id):
     if 'user_id' not in session:
@@ -1365,7 +1416,7 @@ def edit_review(review_id):
     user_id = session.get('user_id')
     connection = connect_to_mysql()
     cursor = connection.cursor(dictionary=True)
-
+    # show all users made reviews
     cursor.execute("SELECT * FROM review WHERE review_id = %s AND user_id = %s", (review_id, user_id))
     review = cursor.fetchone()
 
@@ -1375,7 +1426,7 @@ def edit_review(review_id):
     if request.method == 'POST':
         new_rating = request.form['rating']
         new_comment = request.form['comment']
-
+        # update review with new form data inputted by the user
         cursor.execute("""
             UPDATE review
             SET rating = %s, comment = %s
@@ -1390,19 +1441,20 @@ def edit_review(review_id):
     connection.close()
     return render_template('edit_review.html', review=review)
 
+# delete the review
 @app.route('/delete_review/<int:review_id>', methods=['POST'])
 def delete_review(review_id):
     user_id = session.get('user_id')
     connection = connect_to_mysql()
     cursor = connection.cursor()
-
+    # delete the review from where the review id and user id is given by button pressed most likely idk, ill come back to this comment
     cursor.execute("DELETE FROM review WHERE review_id = %s AND user_id = %s", (review_id, user_id))
     connection.commit()
     cursor.close()
     connection.close()
     return redirect('/reviews')
 
-
+# Profile view of the user
 @app.route('/profile')
 def profile():
     if 'user_id' not in session:
@@ -1412,9 +1464,18 @@ def profile():
     if connection:
         try:
             cursor = connection.cursor(dictionary=True)
-            query = "SELECT user_id, username, email FROM users WHERE user_id = %s"
+            # Now we select profile_picture too
+            query = "SELECT user_id, username, email, profile_picture FROM users WHERE user_id = %s"
             cursor.execute(query, (session['user_id'],))
             user = cursor.fetchone()
+
+            if user and user['profile_picture']:
+                # Detect image type (JPEG or PNG)
+                if user['profile_picture'].startswith(b'\xff\xd8\xff'):
+                    user['mime_type'] = 'jpeg'
+                else:
+                    user['mime_type'] = 'png'
+
             return render_template('profile.html', user=user)
         except Error as e:
             flash(f"Database Error: {e}", 'danger')
@@ -1426,6 +1487,9 @@ def profile():
         flash("Failed to connect to the database.", 'danger')
         return redirect(url_for('logged_home'))
 
+
+# delete user allows users to delete their account
+# its mostly just alot of deleting all of what they have done such as purchases
 @app.route('/delete_user', methods=['POST'])
 def delete_user():
     if 'user_id' not in session:
@@ -1437,31 +1501,31 @@ def delete_user():
         try:
             cursor = connection.cursor()
 
-            # Delete purchases made by the user
+            # delete purchases made by the user
             delete_user_purchases_query = "DELETE FROM purchases WHERE user_id = %s"
             cursor.execute(delete_user_purchases_query, (session['user_id'],))
             connection.commit()
             print(f"Deleted {cursor.rowcount} purchases made by user ID: {session['user_id']}")
 
-            # Delete notifications for the user
+            # delete notifications for the user
             delete_notifications_query = "DELETE FROM notifications WHERE user_id = %s"
             cursor.execute(delete_notifications_query, (session['user_id'],))
             connection.commit()
             print(f"Deleted {cursor.rowcount} notifications for user ID: {session['user_id']}")
 
-            # Delete messages where the user is the sender
+            # delete messages where the user is the sender
             delete_sent_messages_query = "DELETE FROM messages WHERE sender_id = %s"
             cursor.execute(delete_sent_messages_query, (session['user_id'],))
             connection.commit()
             print(f"Deleted {cursor.rowcount} sent messages for user ID: {session['user_id']}")
 
-            # Delete messages where the user is the receiver
+            # delete messages where the user is the receiver
             delete_received_messages_query = "DELETE FROM messages WHERE receiver_id = %s"
             cursor.execute(delete_received_messages_query, (session['user_id'],))
             connection.commit()
             print(f"Deleted {cursor.rowcount} received messages for user ID: {session['user_id']}")
 
-            # Delete purchases related to the user's items (just in case)
+            # delete purchases related to the user's items just in case
             cursor.execute("""
                 DELETE FROM purchases
                 WHERE item_id IN (SELECT item_id FROM items WHERE user_id = %s)
@@ -1469,24 +1533,24 @@ def delete_user():
             connection.commit()
             print(f"Deleted {cursor.rowcount} purchases related to user's items")
 
-            # Delete the user's listings (items)
+            # delete the user's listings items
             delete_items_query = "DELETE FROM items WHERE user_id = %s"
             cursor.execute(delete_items_query, (session['user_id'],))
             connection.commit()
             print(f"Deleted {cursor.rowcount} items for user ID: {session['user_id']}")
 
-            # Delete the user's favorites
+            # delete the user's favorites
             delete_favorites_query = "DELETE FROM adminfavorites WHERE user_id = %s"
             cursor.execute(delete_favorites_query, (session['user_id'],))
             connection.commit()
             print(f"Deleted {cursor.rowcount} favorites for user ID: {session['user_id']}")
 
-            # Now delete the user
+            # now delete the user
             delete_user_query = "DELETE FROM users WHERE user_id = %s"
             cursor.execute(delete_user_query, (session['user_id'],))
             connection.commit()
             print(f"Deleted user ID: {session['user_id']}, Rows affected: {cursor.rowcount}")
-            session.clear()  # Clear the session to log the user out
+            session.clear()
             return redirect(url_for('Unlogged_home'))
         except Error as e:
             print(f"Database Error during deletion: {e}")
@@ -1502,6 +1566,7 @@ def delete_user():
         flash("Failed to connect to the database.", 'danger')
         return redirect(url_for('profile'))
 
+# change the password of the user
 @app.route('/change_password', methods=['POST'])
 def change_password():
     if 'user_id' not in session:
@@ -1522,12 +1587,12 @@ def change_password():
             cursor.execute(query, (session['user_id'],))
             user = cursor.fetchone()
 
-
+            # check the current password is correct
             if not bcrypt.checkpw(current_password.encode('utf-8'), user['password'].encode('utf-8')):
                 flash("Current password is incorrect.", 'danger')
                 return redirect(url_for('profile'))
 
-
+            # if the new passwords dont match then an error will spit out
             if new_password != confirm_password:
                 flash("New passwords do not match.", 'warning')
                 return redirect(url_for('profile'))
@@ -1540,7 +1605,7 @@ def change_password():
             cursor.execute(update_query, (hashed_password.decode('utf-8'), session['user_id']))
             connection.commit()
 
-            flash("Password updated successfully!", 'success')
+
             return redirect(url_for('profile'))
 
         except Error as e:
@@ -1554,6 +1619,7 @@ def change_password():
         flash("Failed to connect to the database.", 'danger')
         return redirect(url_for('profile'))
 
+#  deactivate the listing
 @app.route('/deactivate_listing/<int:item_id>', methods=['GET', 'POST'])
 def deactivate_listing(item_id):
     if 'user_id' not in session:
@@ -1567,7 +1633,7 @@ def deactivate_listing(item_id):
             # Update the item to make it inactive
             cursor.execute("UPDATE items SET is_active = FALSE WHERE item_id = %s AND user_id = %s", (item_id, session['user_id']))
             connection.commit()
-            flash("Item deactivated successfully!", 'success')
+
             return redirect(url_for('my_listings'))  # Redirect back to my listings page
         except Error as e:
             flash(f"Error: {e}", 'danger')
@@ -1580,7 +1646,7 @@ def deactivate_listing(item_id):
         return redirect(url_for('logged_home'))
 
 
-
+#  reactivate listing
 @app.route('/reactivate_listing/<int:item_id>', methods=['GET', 'POST'])
 def reactivate_listing(item_id):
     if 'user_id' not in session:
@@ -1594,8 +1660,8 @@ def reactivate_listing(item_id):
             # Update the item to make it active again
             cursor.execute("UPDATE items SET is_active = TRUE WHERE item_id = %s AND user_id = %s", (item_id, session['user_id']))
             connection.commit()
-            flash("Item reactivated successfully!", 'success')
-            return redirect(url_for('my_listings'))  # Redirect back to my listings page
+
+            return redirect(url_for('my_listings'))
         except Error as e:
             flash(f"Error: {e}", 'danger')
             return redirect(url_for('logged_home'))
@@ -1606,11 +1672,12 @@ def reactivate_listing(item_id):
         flash("Database connection failed.", 'danger')
         return redirect(url_for('logged_home'))
 
+# view users so that admin can ban them
 @app.route('/view_all_users')
 def view_users():
     if 'user_id' not in session or not session.get('is_admin'):
         flash("You don't have permission to view this page.", 'danger')
-        return redirect(url_for('admin_dashboard'))  # Redirect to admin dashboard if not an admin
+        return redirect(url_for('admin_dashboard'))
 
     # Fetch all users from the database
     connection = connect_to_mysql()
@@ -1626,31 +1693,41 @@ def view_users():
             cursor.close()
             connection.close()
 
-    return render_template('view_users.html', users=users)  # Render the view_users template with the updated user list
+    return render_template('view_users.html', users=users)
 
 # Route for banning a user
 @app.route('/ban_user/<int:user_id>', methods=['POST'])
 def ban_user(user_id):
     if 'user_id' not in session or not session.get('is_admin'):
         flash("You don't have permission to perform this action.", 'danger')
-        return redirect(url_for('admin_dashboard'))  # Redirect to admin dashboard if not an admin
+        return redirect(url_for('admin_dashboard'))
 
     connection = connect_to_mysql()
     if connection:
         try:
             cursor = connection.cursor()
+
+            # Update the user to set is_banned to TRUE
             query = "UPDATE users SET is_banned = TRUE WHERE user_id = %s"
             cursor.execute(query, (user_id,))
             connection.commit()
-            flash("User has been banned.", 'success')
+
+            # Deactivate all the items of the banned user
+            deactivate_query = "UPDATE items SET is_active = FALSE WHERE user_id = %s"
+            cursor.execute(deactivate_query, (user_id,))
+            connection.commit()
+
+            flash("User has been banned and their items deactivated.", 'success')
+
         except Error as e:
             flash(f"Error banning user: {e}", 'danger')
         finally:
             cursor.close()
             connection.close()
 
-    # After banning, redirect to view_users to reload the user list
-    return redirect(url_for('view_users'))  # Redirect to view users route to reload the page
+    # after banning, redirect to view_users to reload the user list
+    return redirect(url_for('view_users'))
+
 
 # Route for unbanning a user
 @app.route('/unban_user/<int:user_id>', methods=['POST'])
@@ -1666,7 +1743,7 @@ def unban_user(user_id):
             query = "UPDATE users SET is_banned = FALSE WHERE user_id = %s"
             cursor.execute(query, (user_id,))
             connection.commit()
-            flash("User has been unbanned.", 'success')
+
         except Error as e:
             flash(f"Error unbanning user: {e}", 'danger')
         finally:
@@ -1674,9 +1751,138 @@ def unban_user(user_id):
             connection.close()
 
     # After unbanning, redirect to view_users to reload the user list
-    return redirect(url_for('view_users'))  # Redirect to view users route to reload the page
+    return redirect(url_for('view_users'))
 
-# Route to view all users
+# faq bot answers
+faq_answers = {
+    "How do I change my password?": "You can change your password by clicking <a href='http://127.0.0.1:5000/profile' target='_blank'>here</a>",
+    "How do I delete my account and data?": "You can delete your account and data by clicking <a href='http://127.0.0.1:5000/profile' target='_blank'>here</a>",
+    "How do I access my details?": "You can access your details <a href='http://127.0.0.1:5000/profile' target='_blank'>here</a> ",
+    "How can I contact support?": "You can contact support via email at support@example.com.",
+    "How do I start a chat?": "You can start a chat by finding an item you like and pressing the view item, from there you can message the seller.",
+    "How can I create a review?": "You can create a review after purchasing an item, by going to the My purchases page <a href='http://127.0.0.1:5000/purchased_items' target='_blank'>here</a> and selecting 'review item'"
+}
+# gets the answer to the question
+@app.route('/get_answer', methods=['POST'])
+def get_answer():
+    data = request.get_json()
+    question = data.get('question')
+    answer = faq_answers.get(question, "Sorry, I don't understand that question.")
+    return jsonify({'answer': answer})
+
+
+@app.route('/upload_profile_picture', methods=['POST'])
+def upload_profile_picture():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    if 'profile_picture' not in request.files:
+        flash('No file part', 'danger')
+        return redirect(url_for('profile'))
+
+    file = request.files['profile_picture']
+
+    if file.filename == '':
+        flash('No selected file', 'danger')
+        return redirect(url_for('profile'))
+
+    image_data = file.read()
+
+    connection = connect_to_mysql()
+    if connection:
+        try:
+            cursor = connection.cursor()
+            query = "UPDATE users SET profile_picture = %s WHERE user_id = %s"
+            cursor.execute(query, (image_data, session['user_id']))
+            connection.commit()
+
+        except Error as e:
+            flash(f"Database Error: {e}", 'danger')
+        finally:
+            cursor.close()
+            connection.close()
+
+    return redirect(url_for('profile'))
+
+
+@app.template_filter('b64encode')
+def b64encode_filter(data):
+    if data is None:
+        return ''
+    return base64.b64encode(data).decode('utf-8')
+
+@app.route('/item/<int:item_id>/reviews', methods=['GET'])
+def view_reviews(item_id):
+    # Make sure the user is logged in
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    connection = connect_to_mysql()
+    if connection:
+        try:
+            cursor = connection.cursor(dictionary=True)
+
+            # Fetch the specific item by its ID
+            query = "SELECT * FROM items WHERE item_id = %s"
+            cursor.execute(query, (item_id,))
+            item = cursor.fetchone()
+
+            if item:
+                # Fetch reviews for the item
+                review_query = """
+                SELECT r.review_id, r.rating, r.comment, r.review_date, u.username
+                FROM review r
+                JOIN users u ON r.user_id = u.user_id
+                WHERE r.item_id = %s
+                ORDER BY r.review_date DESC
+                """
+                cursor.execute(review_query, (item_id,))
+                reviews = cursor.fetchall()
+
+                # Render the reviews page with the item and its reviews
+                return render_template('item_reviews.html', item=item, reviews=reviews)
+            else:
+                flash("Item not found.", "danger")
+                return redirect(url_for('logged_home'))
+
+        except Error as e:
+            flash(f"Database Error: {e}", 'danger')
+            return redirect(url_for('logged_home'))
+        finally:
+            cursor.close()
+            connection.close()
+    return redirect(url_for('logged_home'))
+
+@app.route('/view_review/<int:review_id>', methods=['GET'])
+def view_review(review_id):
+    connection = connect_to_mysql()
+    if connection:
+        try:
+            cursor = connection.cursor(dictionary=True)
+            query = """
+            SELECT r.review_id, r.rating, r.comment, r.review_date, r.item_id, u.username
+            FROM review r
+            JOIN users u ON r.user_id = u.user_id
+            WHERE r.review_id = %s
+            """
+            cursor.execute(query, (review_id,))
+            review = cursor.fetchone()
+
+            if review:
+                return render_template('view_review.html', review=review)
+            else:
+                flash('Review not found', 'danger')
+                return redirect(url_for('view_reviews', item_id=review['item_id']))  # Go back to the reviews for this specific item
+        except Exception as e:
+            flash(f"Error retrieving review: {e}", 'danger')
+            return redirect(url_for('view_reviews', item_id=review['item_id']))  # Same here, go back to the item reviews
+        finally:
+            cursor.close()
+            connection.close()
+    return redirect(url_for('logged_home'))
+
+
+
 
 @app.route('/test')
 def test_route():

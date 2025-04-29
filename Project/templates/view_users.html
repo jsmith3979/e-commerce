@@ -28,7 +28,7 @@
         </div>
         <div class="search-bar">
             <form action="{{ url_for('search') }}" method="GET">
-                <input type="text" name="query" placeholder="Search for items..." value="{{ query if query else '' }}" required>
+                <input type="text" name="query" placeholder="Search for items..." value="{{ query if query else '' }}" >
                 <button type="submit">Search</button>
             </form>
         </div>
@@ -225,6 +225,8 @@ recognition.onresult = function(event) {
     window.location.href = '/purchased_items';
   } else if (transcript.includes('create listing')) {
     window.location.href = '/Create_listing';
+  } else if (transcript.includes('profile')) {
+    window.location.href = '/profile';
   }
   else {
     alert("Sorry, I didn't understand: " + transcript);

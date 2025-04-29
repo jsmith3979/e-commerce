@@ -27,7 +27,7 @@
         </div>
         <div class="search-bar">
             <form action="{{ url_for('search') }}" method="GET">
-                <input type="text" name="query" placeholder="Search for items..." value="{{ query if query else '' }}" required>
+                <input type="text" name="query" placeholder="Search for items..." value="{{ query if query else '' }}" >
                 <button type="submit">Search</button>
             </form>
         </div>
@@ -88,6 +88,7 @@
                 {% else %}
                     <a class="btn btn-primary" href="{{ url_for('reactivate_listing', item_id=item.item_id) }}">Reactivate Listing</a>
                 {% endif %}
+                <a href="{{ url_for('view_reviews', item_id=item.item_id) }}" class="btn btn-success">See Reviews</a>
             </div>
         {% endfor %}
     </div>
@@ -216,6 +217,8 @@ recognition.onresult = function(event) {
     window.location.href = '/purchased_items';
   } else if (transcript.includes('create listing')) {
     window.location.href = '/Create_listing';
+  } else if (transcript.includes('profile')) {
+    window.location.href = '/profile';
   }
   else {
     alert("Sorry, I didn't understand: " + transcript);

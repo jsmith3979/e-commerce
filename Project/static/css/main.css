@@ -8,7 +8,7 @@
 
 body {
   background: linear-gradient(200deg, #000000, #0a0f2c);
-  color: #ffffff; /* Optional: makes text easier to read */
+  color: #ffffff;
   min-height: 100vh;
   margin: 0;
   font-family: monospace;
@@ -144,8 +144,12 @@ nav ul li a:hover::after {
     font-weight: 200;
     border-right: 10px;
     border-radius: 10px;
+    height: 586px ;
 }
 a{
+    font-size: 20px;
+}
+a1{
     font-size: 20px;
 }
 
@@ -153,11 +157,14 @@ a{
     width: 100%;
     max-width: 500px;
     margin: 0 auto;
+    margin-top: 10px;
     padding: 30px;
     background: linear-gradient(200deg, #D90368, #DF2935);
     border-radius: 8px;
     font-family: monospace;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 
@@ -202,6 +209,7 @@ a{
 
 #form button {
     width: 100%;
+    margin-top: 5px;
     padding: 14px;
     background-color: #3A6EA5;
     color: white;
@@ -392,18 +400,7 @@ a{
 
     }
 
-/*#chatbox {*/
-/*    width: 100%;*/
-/*    max-width: 500px;*/
-/*    margin: 0 auto;*/
-/*    padding: 30px;*/
-/*    background-color: #f4f4f4;*/
-/*    border-radius: 8px;*/
-/*    font-family: monospace;*/
-/*    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);*/
-/*    color: #3A6EA5;*/
-/*    font-size: 20px;*/
-/*}*/
+
 
 
 #chatbox h3 {
@@ -561,14 +558,14 @@ a{
 }
 
 .notification-container {
-  position: relative; /* For positioning the badge relative to the icon */
+  position: relative;
   display: inline-block;
 }
 
 .notification-icon {
   width: 34px;
   height: 34px;
-  fill: #555; /* Change color as needed */
+  fill: #555;
 }
 .notification-icon:hover {
     transform: scale(1.1);
@@ -578,11 +575,11 @@ a{
   position: absolute;
   top: 0;
   right: 0;
-  background: red;     /* Badge background */
-  color: white;        /* Badge text color */
-  border-radius: 50%;  /* Make it circular */
-  padding: 2px 6px;    /* Adjust size as needed */
-  font-size: 12px;     /* Adjust font size */
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
   font-weight: bold;
 }
 .notifications-list {
@@ -590,7 +587,7 @@ a{
   margin: 0 auto;
 }
 
-/* Individual notification styling */
+
 .notification {
   background: #fff;
   border-left: 15px solid #4CAF50;
@@ -603,22 +600,19 @@ a{
   color: black;
 }
 
-/* Styling for read notifications */
+
 .notification.read {
   background: #e9e9e9;
   border-left-color: #aaa;
   color: #777;
 }
 
-/* Timestamp styling */
+
 .notification .timestamp {
   font-size: 0.8em;
   color: #999;
   margin-top: 5px;
 }
-
-/* Hover effects */
-
 
 .notifications-list h2 {
     text-align: center;
@@ -648,7 +642,7 @@ a{
     font-size: 12px;
     padding: 2px 6px;
     border-radius: 50%;
-    display: none; /* Or show conditionally with JS */
+    display: none;
 }
 .basket-icon:hover {
     transform: scale(1.1);
@@ -700,6 +694,7 @@ table img {
     width: 100%;
     max-width: 300px;
     margin: 0 auto;
+    padding: 10px;
     padding: 15px;
     background-color: #3A6EA5;
     color: white;
@@ -721,11 +716,8 @@ table img {
 
 }
 
-.quantity-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
+
+
 
 input[type="number"] {
   width: 60px;
@@ -737,19 +729,20 @@ input[type="number"] {
 .message-button {
   display: inline-block;
   padding: 0.5rem 1rem;
+  margin-top: 10px;
   background-color: #3A6EA5;
   color: white;
   border-radius: 6px;
   text-decoration: none;
   transition: background-color 0.3s ease;
   text-align: center;
-  width: fit-content;
+
 }
 
 .message-button:hover {
   background-color: #5E96D1;
 }
-/* Container for all product cards */
+
 .product-list {
     display: flex;
     flex-wrap: wrap;
@@ -758,7 +751,7 @@ input[type="number"] {
     padding: 30px;
 }
 
-/* Each product card */
+
 .product-card {
     background: linear-gradient(200deg, #D90368, #DF2935);
     border-radius: 15px;
@@ -775,7 +768,7 @@ input[type="number"] {
     transform: translateY(-5px);
 }
 
-/* Product image */
+
 .product-card img {
     width: 100%;
     height: 180px;
@@ -783,20 +776,20 @@ input[type="number"] {
     border-radius: 10px;
 }
 
-/* Title */
+
 .product-card h3 {
     font-size: 1.3em;
     margin: 10px 0;
     color: white;
 }
 
-/* Text details */
+
 .product-card p {
     margin: 5px 0;
     color: white;
 }
 
-/* View button */
+
 .product-card .btn {
     display: inline-block;
     margin-top: 10px;
@@ -829,10 +822,10 @@ h1{
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     text-align: center;
 }
-/* Target the whole recommendations section */
 
 
-/* Optional: style the heading */
+
+
 .admin-favorites .highlight-heading {
     font-size: 2rem;
     color: #d2691e;
@@ -873,7 +866,7 @@ h1{
     margin: 0 auto;
 }
 
-/* Image styling */
+
 .image-container {
     text-align: center;
     margin-bottom: 20px;
@@ -887,7 +880,7 @@ h1{
 
 }
 
-/* Form elements */
+
 .form-group {
     margin-bottom: 20px;
 }
@@ -898,18 +891,18 @@ h1{
     margin-bottom: 5px;
 }
 #price {
-    width: 300px;     /* makes it wider */
-    height: 45px;     /* makes it taller */
-    font-size: 1.1rem; /* increases text size */
-    padding: 0.5rem;  /* spacing inside */
+    width: 300px;
+    height: 45px;
+    font-size: 1.1rem;
+    padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 6px;
 }
 #stock_quantity {
-    width: 300px;     /* makes it wider */
-    height: 45px;     /* makes it taller */
-    font-size: 1.1rem; /* increases text size */
-    padding: 0.5rem;  /* spacing inside */
+    width: 300px;
+    height: 45px;
+    font-size: 1.1rem;
+    padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 6px;
 }
@@ -976,7 +969,7 @@ h1{
 }
 
 
-/* Burger */
+
 .burger {
   display: none;
   font-size: 30px;
@@ -984,7 +977,7 @@ h1{
   user-select: none;
 }
 
-/* Nav */
+
 .nav-links {
   display: flex;
   gap: 1.5rem;
@@ -1017,11 +1010,11 @@ h1{
 
 .reviews-table th,
 .reviews-table td {
-    word-wrap: break-word; /* Ensures that long words break and wrap to the next line */
-    word-break: break-word; /* Forces breaks in words if they are too long */
-    overflow-wrap: break-word; /* Breaks the text onto a new line if needed */
-    white-space: normal; /* Ensures that the text is not cut off or overflowed horizontally */
-    max-width: 200px; /* Optional: You can limit the width of the comment column */
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    max-width: 200px;
     color: white;
 }
 
@@ -1042,7 +1035,7 @@ h1{
 }
 
 @media (max-width: 768px) {
-  /* General Layout */
+
   .container,
   .header,
   .row,
@@ -1067,7 +1060,7 @@ h1{
     font-size: 30px;
   }
 
-  /* Navigation */
+
   .burger {
     display: block;
     font-size: 30px;
@@ -1098,7 +1091,7 @@ h1{
     text-align: center;
   }
 
-  /* Form Elements */
+
   .search-bar input,
   .search-bar button,
   .filter-section input,
@@ -1108,7 +1101,7 @@ h1{
     margin-bottom: 10px;
   }
 
-  /* Product Display */
+
   .Product,
   .inspect_Product,
   .panel,
@@ -1144,14 +1137,14 @@ h1{
     width: 100%;
   }
 
-  /* Tables */
+
   table {
     font-size: 14px;
     overflow-x: auto;
     display: block;
   }
 
-  /* Tabs */
+
   .tab-links {
     font-size: 16px;
     margin: 0 0 10px;
@@ -1173,10 +1166,11 @@ h1{
 }
 .icons {
     display: flex;
-    align-items: center;  /* vertically center icons */
-    gap: 16px;            /* space between icons */
+    align-items: center;
+    gap: 16px;
 }
 .profile-icon{
+    height: 30px;
     width: 70px;
     color: #555;
 }
@@ -1201,13 +1195,13 @@ h1{
     color: #856404;
 }
 table tr:hover {
-    background-color: inherit; /* Keep the background color the same */
-    cursor: default; /* Change the cursor to default (no hand pointer) */
+    background-color: inherit;
+    cursor: default;
 }
 .view-item-button {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #3A6EA5; /* green shade */
+    background-color: #3A6EA5;
     color: white;
     font-weight: bold;
     text-decoration: none;
@@ -1276,4 +1270,183 @@ table tr:hover {
     .search-bar1 button {
         width: 100%;
     }
+}
+
+
+
+
+.chat-box {
+    margin-bottom: 10px;
+    background-color: white;
+    border-radius: 5px;
+
+
+}
+
+.chat-box p {
+    margin: 0;
+    color: black;
+    font-family: monospace;
+}
+
+
+.question-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.question-list li {
+    background-color: #3A6EA5;
+    color: white;
+    padding: 8px;
+    margin: 5px 0;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.question-list li:hover {
+    background-color: #5E96D1;
+}
+
+
+.exit-button {
+    margin-top: 20px;
+    background-color: #3A6EA5;
+    color: white;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.exit-button:hover {
+    background-color: #5E96D1;
+}
+
+
+.faq-trigger {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #3A6EA5;
+    color: white;
+    border-radius: 50%;
+    padding: 15px;
+    cursor: pointer;
+    font-size: 20px;
+    z-index: 10000;
+}
+
+.faq-trigger:hover {
+    background-color: #5E96D1;
+}
+
+.chat-container {
+    display: none;
+    position: fixed;
+    bottom: 70px;
+    right: 20px;
+    background: linear-gradient(200deg, #D90368, #DF2935);
+    border: 1px solid #ccc;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    overflow-y: auto;
+    z-index: 10001;
+}
+
+.chat-container.show {
+    display: block;
+}
+.profile-container1 {
+    display: flex;
+    justify-content: center;
+}
+
+.seller-info{
+    margin-top: 20px;
+    text-align: center;
+}
+
+.profile-picture1{
+    margin-top: 20px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+
+.product-list1{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+}
+.product-card1 {
+    background: linear-gradient(200deg, #D90368, #DF2935);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 280px;
+    padding: 15px;
+    text-align: center;
+    margin-left: 0;
+}
+
+.review-header {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 10px;
+}
+
+
+.review-rating {
+    font-size: 20px;
+    color: white;
+    margin-bottom: 10px;
+}
+
+
+.review-comment {
+    font-size: 20px;
+    color: white;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+.review-comment.limited {
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+
+.btn {
+    background-color: #3A6EA5;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn:hover {
+    background-color: #5E96D1;
+}
+
+
+@media (max-width: 768px) {
+    .product-card {
+        width: 100%;
+    }
+}
+#quantity{
+    margin-top: 10px;
 }
