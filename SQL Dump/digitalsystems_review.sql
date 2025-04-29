@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.31, for Win64 (x86_64)
+﻿-- MySQL dump 10.13  Distrib 8.0.31, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: digitalsystems
 -- ------------------------------------------------------
@@ -39,7 +39,7 @@ CREATE TABLE `review` (
 
 LOCK TABLES `review` WRITE;
 /*!40000 ALTER TABLE `review` DISABLE KEYS */;
-INSERT INTO `review` VALUES (17,15,33,5,'great bit of cheese','2025-04-28 06:22:53'),(18,16,34,4,'Great headsets!','2025-04-28 06:36:42'),(19,16,37,3,'Nice TV, does the job!','2025-04-28 06:36:54');
+INSERT INTO `review` VALUES (17,15,33,5,'great bit of cheese','2025-04-28 06:22:53');
 /*!40000 ALTER TABLE `review` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-28  6:54:33
+-- Dump completed on 2025-04-29  9:02:11

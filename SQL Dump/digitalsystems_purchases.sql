@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.31, for Win64 (x86_64)
+﻿-- MySQL dump 10.13  Distrib 8.0.31, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: digitalsystems
 -- ------------------------------------------------------
@@ -56,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-28  6:54:32
+-- Dump completed on 2025-04-29  9:02:11
