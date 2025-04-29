@@ -20,8 +20,6 @@ body {
     left: 0;
     width: 100%;
     padding: 20px;
-
-    display: flex;
     justify-content: space-between;
     align-items: center;
 }
@@ -1475,7 +1473,7 @@ table tr:hover {
     width: 100%;
     padding: 10px 20px; /* Adjust vertical and horizontal padding */
     z-index: 1000;
-    display: flex;
+
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap; /* Enable wrapping for smaller screens */
