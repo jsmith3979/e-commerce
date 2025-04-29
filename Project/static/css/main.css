@@ -20,7 +20,6 @@ body {
     left: 0;
     width: 100%;
     padding: 20px;
-    z-index: 1000;
 
     display: flex;
     justify-content: space-between;
@@ -29,7 +28,7 @@ body {
 .header {
     width: 100%;
     align-items: center;
-
+    padding: 10px 0;
 }
 
 nav ul {
@@ -241,22 +240,20 @@ a1{
 }
 
 
-.headtext{
-    padding: 50px;
-
-
-}
 .logo {
     display: flex;
     align-items: center;
     gap: 5px;
+    margin-top: 10px;
+    justify-content: center;
+    width: 100%;
 }
 
 .logo h1{
-    font-size: 50px;
+    font-size: 30px;
 }
 .logo h2{
-    font-size: 50px;
+    font-size: 30px;
     color: #DF2935;
 }
 
@@ -1449,4 +1446,263 @@ table tr:hover {
 }
 #quantity{
     margin-top: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+    }
+    .search-bar input {
+        width: 100%;
+    }
+    .panel {
+        width: 100%;
+    }
+
+}
+
+
+@media screen and (min-width: 769px) {
+    .navbar {
+        flex-direction: row;
+    }
+}
+
+.container {
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 20px; /* Adjust vertical and horizontal padding */
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Enable wrapping for smaller screens */
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    width: 100%; /* Take full width on smaller screens */
+    justify-content: space-between; /* Space out burger and nav on small screens */
+}
+
+nav ul {
+    display: flex;
+    gap: 10px; /* Reduce gap on smaller screens */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline-block;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px; /* Slightly smaller font */
+    position: relative;
+    padding: 5px 0; /* Add some vertical padding */
+}
+
+nav ul li a::after {
+    content: '';
+    width: 0%;
+    height: 2px; /* Thinner underline */
+    background: linear-gradient(200deg, #D90368, #DF2935);
+    position: absolute;
+    left: 0;
+    bottom: -4px; /* Adjust position */
+    transition: 0.5s;
+}
+
+nav ul li a:hover::after {
+    width: 100%;
+}
+
+.search-bar {
+    width: 100%; /* Take full width */
+    margin: 10px 0; /* Adjust margin */
+    text-align: center;
+}
+
+.search-bar form {
+    display: flex;
+    gap: 5px; /* Adjust gap between input and button */
+    align-items: center;
+    justify-content: center; /* Center the form */
+}
+
+.search-bar input {
+    padding: 8px; /* Adjust padding */
+    width: calc(100% - 80px); /* Adjust width relative to button */
+    max-width: 400px; /* Set a max width */
+    font-size: 14px; /* Smaller font */
+    border-radius: 5px;
+    font-family: monospace;
+    border: 1px solid #ccc;
+    box-sizing: border-box; /* Ensure padding doesn't increase width */
+}
+
+.search-bar button {
+    padding: 8px 15px; /* Adjust padding */
+    font-size: 14px; /* Smaller font */
+    cursor: pointer;
+    font-family: monospace;
+    border-radius: 5px;
+    border: none;
+    background-color: #3A6EA5;
+    color: white;
+}
+
+.search-bar button:hover {
+    background-color: #5E96D1;
+}
+
+.icons {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Reduce gap */
+    margin-top: 10px; /* Add some top margin if needed */
+    justify-content: center; /* Center icons on smaller screens */
+    width: 100%; /* Take full width */
+}
+
+.notification-container a,
+.basket-container a,
+.profile-container a {
+    display: flex;
+}
+
+.notification-icon,
+.basket-icon,
+.profile-icon {
+    width: 28px; /* Slightly smaller icons */
+    height: 28px;
+    fill: #555;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 5px;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+
+
+
+@media (max-width: 768px) {
+  .container,
+  .header,
+  .row,
+  .Item_column,
+  .inspect_item_column,
+  .panel-grid,
+  .panel-grid2,
+  .search-bar,
+  .search-bar1,
+  .search-bar2,
+  .filter-section,
+  .tabs {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .navbar {
+    flex-direction: column; /* Stack burger and nav */
+    align-items: center;
+  }
+
+  .nav-links {
+    display: none; /* Keep hidden by default on small screens */
+    flex-direction: column;
+    position: static; /* Adjust positioning */
+    background-color: black;
+    padding: 1rem;
+    z-index: 1000;
+    border: 1px solid #ccc;
+    width: 100%; /* Take full width */
+    margin-top: 10px; /* Add some space below burger */
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  .nav-links li {
+    margin: 10px 0;
+    text-align: center;
+  }
+
+  .search-bar input,
+  .search-bar button,
+  .filter-section input,
+  .filter-section select,
+  .filter-section button {
+    width: 90%;
+    margin-bottom: 10px;
+  }
+
+  .Product,
+  .inspect_Product,
+  .panel,
+  .basket-div,
+  #form,
+  #chatbox {
+    width: 90% !important;
+    padding: 20px;
+  }
+
+  .Product h2,
+  .inspect_Product h2 {
+    font-size: 22px;
+  }
+
+  .Product p,
+  .inspect_Product p {
+    font-size: 14px;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+
+  .Photo, .Photo2 {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+  }
+
+  .about-col-1,
+  .about-col-2 {
+    flex-basis: 100%;
+    width: 100%;
+  }
+
+  table {
+    font-size: 14px;
+    overflow-x: auto;
+    display: block;
+  }
+
+  .tab-links {
+    font-size: 16px;
+    margin: 0 0 10px;
+  }
+
+  .icons {
+    margin-top: 15px; /* Add more space for icons if stacked */
+  }
+}
+.inspect_Product img {
+    max-width: 100%;  /* Allow the image to scale within its container */
+    height: auto;     /* Maintain aspect ratio */
 }
