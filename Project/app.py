@@ -1351,12 +1351,12 @@ def review_item(item_id):
     if 'user_id' not in session:
         flash('Please log in first', 'warning')
         return redirect(url_for('login'))
-    user_id = session.get('user_id')
 
+    user_id = session.get('user_id')
     connection = connect_to_mysql()
     cursor = connection.cursor(dictionary=True)
 
-    # Fetch the item details for the review page
+    # Fetch the item details
     cursor.execute("SELECT * FROM items WHERE item_id = %s", (item_id,))
     item = cursor.fetchone()
 
@@ -1367,21 +1367,31 @@ def review_item(item_id):
         rating = request.form['rating']
         comment = request.form['comment']
 
-        # Check if the user has already reviewed the item
+        # Check if user already reviewed
         cursor.execute("SELECT * FROM review WHERE user_id = %s AND item_id = %s", (user_id, item_id))
         if cursor.fetchone():
             return "You have already reviewed this item.", 400
 
-        # Insert the review into the database
+        # Insert new review
         cursor.execute(
             "INSERT INTO review (user_id, item_id, rating, comment) VALUES (%s, %s, %s, %s)",
             (user_id, item_id, rating, comment)
         )
         connection.commit()
+        return redirect('/purchased_items')
 
-        return redirect('/purchased_items')  # Redirect back to the purchases page
+    # Check if review already exists (for GET)
+    # Get existing review if any
+    cursor.execute("SELECT * FROM review WHERE user_id = %s AND item_id = %s", (user_id, item_id))
+    existing_review = cursor.fetchone()
 
-    return render_template('review_item.html', item=item)
+    return render_template(
+        'review_item.html',
+        item=item,
+        has_reviewed=bool(existing_review),
+        review_id=existing_review['review_id'] if existing_review else None
+    )
+
 
 @app.route('/reviews')
 def show_reviews():

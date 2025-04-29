@@ -65,9 +65,16 @@
     </div>
 </div>
 
-  <section id="create-listing-section">
-    <h1>Review: {{ item.name }}</h1>
+<section id="create-listing-section">
+  <h1>Review: {{ item.name }}</h1>
     <form action="{{ url_for('review_item', item_id=item.item_id) }}" method="POST" id="form">
+
+        {% if has_reviewed %}
+        <p>You have already reviewed this item.</p>
+        <a href="{{ url_for('edit_review', review_id=review_id) }}">
+            <button type="button">✏️ Edit Your Review</button>
+        </a>
+        {% else %}
         <label for="rating">Rating:</label>
         <select name="rating" id="rating" required>
             <option value="">--</option>
@@ -75,13 +82,11 @@
                 <option value="{{ i }}">{{ i }}</option>
             {% endfor %}
         </select><br><br>
-
         <label for="comment">Comment:</label>
         <textarea name="comment" id="comment" rows="5" required></textarea><br><br>
-
         <button type="submit">Submit Review</button>
     </form>
-  </section>
+  {% endif %}
 </body>
 </html>
 <script>
