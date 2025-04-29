@@ -1367,11 +1367,6 @@ def review_item(item_id):
         rating = request.form['rating']
         comment = request.form['comment']
 
-        # Check if user already reviewed
-        cursor.execute("SELECT * FROM review WHERE user_id = %s AND item_id = %s", (user_id, item_id))
-        if cursor.fetchone():
-            return "You have already reviewed this item.", 400
-
         # Insert new review
         cursor.execute(
             "INSERT INTO review (user_id, item_id, rating, comment) VALUES (%s, %s, %s, %s)",
@@ -1380,7 +1375,7 @@ def review_item(item_id):
         connection.commit()
         return redirect('/purchased_items')
 
-    # Check if review already exists (for GET)
+    # Check if review already exists
     # Get existing review if any
     cursor.execute("SELECT * FROM review WHERE user_id = %s AND item_id = %s", (user_id, item_id))
     existing_review = cursor.fetchone()
