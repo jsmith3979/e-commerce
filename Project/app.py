@@ -1151,8 +1151,10 @@ def admin_dashboard():
 
             # get the admin's favorited items
             cursor.execute("""
-                SELECT i.* FROM adminfavorites af
+                SELECT i.*, u.username 
+                FROM adminfavorites af
                 JOIN items i ON af.item_id = i.item_id
+                JOIN users u ON i.user_id = u.user_id
                 WHERE af.user_id = %s
             """, (session['user_id'],))
             favorites = cursor.fetchall()
