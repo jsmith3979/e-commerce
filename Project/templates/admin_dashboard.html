@@ -27,7 +27,7 @@
                 </ul>
             </nav>
         </div>
-        <div class="search-bar2">
+        <div class="search-bar">
             <form action="{{ url_for('search') }}" method="GET">
                 <input type="text" name="query" placeholder="Search for items..." value="{{ query if query else '' }}" >
                 <button type="submit">Search</button>
