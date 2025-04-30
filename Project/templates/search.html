@@ -95,7 +95,10 @@
     </div>
 </div>
 
-
+<div class="tts">
+    <button class="text-to-speech" onclick="speakText()">TTS</button>
+    <button onclick="startListening()">🎙️ Voice Command</button>
+</div>
 
 <div class="Item_column {% if show_admin_favorites %}admin-favorites{% endif %}">
     {% for item in items %}
