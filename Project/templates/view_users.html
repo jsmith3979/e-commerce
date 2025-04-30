@@ -64,45 +64,50 @@
         <div class="logo"><h2>E</h2><h1>BUY</h1></div>
     </div>
 </div>
-    <h1>All Users</h1>
-    {% if users %}
-        <table>
-            <thead>
+<h1>All Users</h1>
+{% if users %}
+    <table>
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Admin Status</th>
+                <th>Ban Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
                 <tr>
-                    <th>User ID</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Admin Status</th>
-                    <th>Ban Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                    <tr>
-                        <td>{{ user.user_id }}</td>
-                        <td>{{ user.username }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>{{ 'Yes' if user.is_admin else 'No' }}</td>
-                        <td>{{ 'Banned' if user.is_banned else 'Active' }}</td>
-                        <td>
-                            {% if user.is_banned %}
-                                <form action="{{ url_for('unban_user', user_id=user.user_id) }}" method="POST">
-                                    <button type="submit" class="btn btn-success">Unban User</button>
-                                </form>
-                            {% else %}
+                    <td>{{ user.user_id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ 'Yes' if user.is_admin else 'No' }}</td>
+                    <td>{{ 'Banned' if user.is_banned else 'Active' }}</td>
+                    <td>
+                        {% if user.is_banned %}
+                            <form action="{{ url_for('unban_user', user_id=user.user_id) }}" method="POST">
+                                <button type="submit" class="btn btn-success">Unban User</button>
+                            </form>
+                        {% else %}
+                            {% if user.user_id != session['user_id'] %}
                                 <form action="{{ url_for('ban_user', user_id=user.user_id) }}" method="POST">
                                     <button type="submit" class="btn btn-danger">Ban User</button>
                                 </form>
+                            {% else %}
+
                             {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>No users found.</p>
-    {% endif %}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No users found.</p>
+{% endif %}
+
 </body>
 </html>
 

@@ -1709,6 +1709,11 @@ def ban_user(user_id):
         flash("You don't have permission to perform this action.", 'danger')
         return redirect(url_for('admin_dashboard'))
 
+    # Prevent the admin from banning themselves
+    if session['user_id'] == user_id:
+        flash("You cannot ban yourself.", 'danger')
+        return redirect(url_for('view_users'))
+
     connection = connect_to_mysql()
     if connection:
         try:
@@ -1732,7 +1737,6 @@ def ban_user(user_id):
             cursor.close()
             connection.close()
 
-    # after banning, redirect to view_users to reload the user list
     return redirect(url_for('view_users'))
 
 
