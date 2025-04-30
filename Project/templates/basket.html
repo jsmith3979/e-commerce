@@ -87,14 +87,14 @@
                         <img src="{{ url_for('item_image', item_id=item.item_id) }}" alt="{{ item.name }}" width="50" height="50">
                         {{ item.name }}
                     </td>
-                    <td>${{ item.price|float }}</td>
+                    <td>£{{ item.price|float }}</td>
                     <td>
                         <form action="/update_basket" method="POST" class="update-form" style="display:inline;">
                             <input type="number" name="quantity_{{ item.item_id }}" value="{{ item.quantity|int }}" min="1" class="quantity-input" onchange="this.form.submit()">
                         </form>
                     </td>
                     
-                    <td>${{ (item.price * item.quantity)|float }}</td>
+                    <td>£{{ (item.price * item.quantity)|float }}</td>
                     <td>
                         <form action="/delete_from_basket" method="POST" style="display:inline;">
                             <input type="hidden" name="item_id" value="{{ item.item_id }}">

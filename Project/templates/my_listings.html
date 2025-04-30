@@ -79,7 +79,7 @@
                 {% endif %}
                 <h3>{{ item.name }}</h3>
                 <img src="{{ url_for('item_image', item_id=item.item_id) }}" alt="{{ item.name }}" width="200">
-                <p><strong>Price:</strong> ${{ item.price }}</p>
+                <p><strong>Price:</strong> £{{ item.price }}</p>
                 <p><strong>Category:</strong> {{ item.category }}</p>
                 <p><strong>Stock:</strong> {{ item.stock_quantity }}</p>
                 <a class="btn btn-success" href="{{ url_for('edit_listing', item_id=item.item_id) }}">Edit Listing</a>

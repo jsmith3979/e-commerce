@@ -72,7 +72,7 @@
       <h1>{{ item.name }}</h1>
       <img src="{{ url_for('item_image', item_id=item.item_id) }}" alt="{{ item.name }} Image" width="300" height="300">
       <p><strong>Description:</strong> {{ item.description }}</p>
-      <p><strong>Price:</strong> ${{ item.price }}</p>
+      <p><strong>Price:</strong> £{{ item.price }}</p>
       <p><strong>Category:</strong> {{ item.category }}</p>
     </div>
   </div>

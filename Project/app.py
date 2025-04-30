@@ -1043,7 +1043,7 @@ def purchase():
                 cursor.execute(purchase_query, (user_id, item_id, quantity, total_price))
 
                 # Insert a notification for the purchase
-                notification_message = f"Your purchase of {quantity}x {item['name']} for ${total_price:.2f} was successful!"
+                notification_message = f"Your purchase of {quantity}x {item['name']} for £{total_price:.2f} was successful!"
                 notification_query = """
                     INSERT INTO notifications (user_id, message, is_read)
                     VALUES (%s, %s, 0)
@@ -1596,12 +1596,12 @@ def change_password():
 
             # check the current password is correct
             if not bcrypt.checkpw(current_password.encode('utf-8'), user['password'].encode('utf-8')):
-                flash("Current password is incorrect.", 'danger')
+                flash("Current password is incorrect.", 'password')
                 return redirect(url_for('profile'))
 
             # if the new passwords dont match then an error will spit out
             if new_password != confirm_password:
-                flash("New passwords do not match.", 'warning')
+                flash("New passwords do not match.", 'password')
                 return redirect(url_for('profile'))
 
             # Hash the new password before storing it
@@ -1612,7 +1612,7 @@ def change_password():
             cursor.execute(update_query, (hashed_password.decode('utf-8'), session['user_id']))
             connection.commit()
 
-            flash("Password changed successfully!", 'success')
+            flash("Password changed successfully!", 'password')
             return redirect(url_for('profile'))
 
         except Error as e:

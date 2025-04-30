@@ -87,16 +87,7 @@
     </div>
     {% endif %}
 </div>
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    {% for category, message in messages %}
-      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-        {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    {% endfor %}
-  {% endif %}
-{% endwith %}
+
 
 <div class="inspect_item_column">
     <div class="inspect_Product">
@@ -104,7 +95,7 @@
             <h1>{{ item.name }}</h1>
             <img src="{{ url_for('item_image', item_id=item.item_id) }}" alt="{{ item.name }} Image" width="300" height="300">
             <p><strong>Description:</strong> {{ item.description }}</p>
-            <p><strong>Price:</strong> ${{ item.price }}</p>
+            <p><strong>Price:</strong> £{{ item.price }}</p>
             <p><strong>Category:</strong> {{ item.category }}</p>
             <p><strong>Stock:</strong> {{ item.stock_quantity }}</p>
             <a href="{{ url_for('view_reviews', item_id=item.item_id) }}" class="btn btn-success">See Reviews</a>

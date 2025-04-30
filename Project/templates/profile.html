@@ -91,16 +91,18 @@
         <button type="submit">Upload Picture</button>
     </form>
 
-    <form action="{{ url_for('change_password') }}" method="POST">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div>
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">{{ message }}</div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
+<form action="{{ url_for('change_password') }}" method="POST">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div>
+                {% for category, message in messages %}
+                    {% if category == 'password' %}
+                        <div class="alert alert-info">{{ message }}</div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
         <div>
             <label for="current_password">Current Password:</label>
             <input type="password" id="current_password" name="current_password" required />
