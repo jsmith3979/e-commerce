@@ -1612,7 +1612,7 @@ def change_password():
             cursor.execute(update_query, (hashed_password.decode('utf-8'), session['user_id']))
             connection.commit()
 
-
+            flash("Password changed successfully!", 'success')
             return redirect(url_for('profile'))
 
         except Error as e:
