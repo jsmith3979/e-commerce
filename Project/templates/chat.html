@@ -74,6 +74,7 @@
       <p><strong>Description:</strong> {{ item.description }}</p>
       <p><strong>Price:</strong> £{{ item.price }}</p>
       <p><strong>Category:</strong> {{ item.category }}</p>
+      <a href="{{ url_for('item_detail', item_id=item.item_id) }}" class="btn btn-success">Return to Item Detail</a>
     </div>
   </div>
 </div>
